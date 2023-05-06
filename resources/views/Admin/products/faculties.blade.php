@@ -9,25 +9,63 @@
 @section('content')
     <div class="box box-success">
 
+      
         <div class="box-header">
-            <h3 class="box-title">List of System Users</h3>
-            <a onclick="addForm()" class="btn btn-primary pull-right" ><i class="fa fa-plus"></i> Add User</a>
-            <!-- <a href="/register" class="btn btn-success" ><i class="fa fa-plus"></i> Add User</a> -->
+            <h3 class="box-title">List of Faculties have Product ( {{$product->name}} ) </h3>
+
+            <a  href="{{ route('faculties_products.create') }}" class="btn btn-primary pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a>
+            {{-- <a onclick="addForm()" class="btn btn-success pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a> --}}
         </div>
 
-        
+
+    </div>
+    
+        <!-- /.box-header -->
+        <div class="box-body filter_section">
+            <div class="form-group">
+              
+                <div class="col-md-3">
+                    <label for="name">Item ID :</label>
+                    <input type="text" class="form-control"
+                        id="id" name="id" 
+                        placeholder="Item ID">
+                   
+                </div>
+                <div class="col-md-3">
+                    <label for="name">Item Name :</label>
+                    <input type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
+                        id="name" name="name" 
+                        placeholder="Name">
+                    
+                </div>
+          
+                <div class="col-md-3">
+                    <label for="faculty_id">Category:</label>
+                    
+                    {!! Form::select('category_id', $categories, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Category --', 'id' => 'category_id', 'required']) !!}
+                    <span class="help-block with-errors"></span>
+                </div>
+                
+               
+            </div>
+        </div>
+        <!-- /.box-body -->
+    <div class="box box-success">
 
 
         <!-- /.box-header -->
         <div class="box-body">
-            <table id="user-table" class="table table-bordered table-hover table-striped">
+            <table id="products-table" class="table table-bordered table-hover table-striped">
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Actions</th>
+                    <th>Qty</th>
+                    <th>Minimum Qty</th>
+                    <th>Monitor inventory auto</th>
+                    {{-- <th>Category</th> --}}
+                    {{-- <th>Faculty</th> --}}
+                    {{-- <th>Actions</th> --}}
                 </tr>
                 </thead>
                 <tbody></tbody>
@@ -36,7 +74,7 @@
         <!-- /.box-body -->
     </div>
 
-    @include('user.form')
+
 @endsection
 
 @section('bot')
@@ -45,68 +83,66 @@
     <script src=" {{ asset('assets/bower_components/datatables.net/js/jquery.dataTables.min.js') }} "></script>
     <script src="{{ asset('assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }} "></script>
 
-       <!-- Validator  -->
+    {{-- Validator --}}
     <script src="{{ asset('assets/validator/validator.min.js') }}"></script>
-<!-- 
-    <script>
-    $(function () {
-    $('#items-table').DataTable()
-    $('#example2').DataTable({
-    'paging'      : true,
-    'lengthChange': false,
-    'searching'   : false,
-    'ordering'    : true,
-    'info'        : true,
-    'autoWidth'   : false
-    })
-    })
-    </script> -->
-    
+
+    {{--<script>--}}
+    {{--$(function () {--}}
+    {{--$('#items-table').DataTable()--}}
+    {{--$('#example2').DataTable({--}}
+    {{--'paging'      : true,--}}
+    {{--'lengthChange': false,--}}
+    {{--'searching'   : false,--}}
+    {{--'ordering'    : true,--}}
+    {{--'info'        : true,--}}
+    {{--'autoWidth'   : false--}}
+    {{--})--}}
+    {{--})--}}
+    {{--</script>--}}
 
     <script type="text/javascript">
-          function addForm() {
+        var table = $('#products-table').DataTable({
+            processing: true,
+            serverSide: true,
+            rl: "{{ url('apiFaculties_products') }}" + '/' + "{{$product->id}}" ,
+            columns: [
+                {data: 'id', name: 'id'},
+                {data: 'name', name: 'name'},
+                {data: 'qty', name: 'qty'},
+                {data: 'minimum_qty', name: 'minimum_qty'},
+                {data: 'monitor_inventory_auto', name: 'monitor_inventory_auto'}
+                // {data: 'type', name: 'type'},
+                // // {data: 'show_photo', name: 'show_photo'},
+                // {data: 'category_name', name: 'category_name'},
+                // {data: 'action', name: 'action',orderable: false, searchable: false}
+            ]
+        });
+
+        function addForm() {
             save_method = "add";
             $('input[name=_method]').val('POST');
             $('#modal-form').modal('show');
             $('#modal-form form')[0].reset();
-            $('.modal-title').text('Add User');
-            $('#password').addAttr('required');;
-            $('#password-confirm').addAttr('required');;
+            $('.modal-title').text('Add Products');
         }
 
-        var table = $('#user-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('api.users') }}",
-            columns: [
-                {data: 'id', name: 'id'},
-                {data: 'name', name: 'name'},
-                {data: 'email', name: 'email'},
-                {data: 'role', name: 'role'},
-                {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
-        });
         function editForm(id) {
             save_method = 'edit';
             $('input[name=_method]').val('PATCH');
             $('#modal-form form')[0].reset();
             $.ajax({
-                url: "{{ url('user') }}" + '/' + id + "/edit",
+                url: "{{ url('faculties_products') }}" + '/' + id + "/edit",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
-                    console.log(data);
                     $('#modal-form').modal('show');
-                    $('.modal-title').text('Edit User');
-                    $('#faculty_id option:selected').prop('selected', false);
-                    $('#faculty_id option[value='+data.id+']').attr('selected','selected');
+                    $('.modal-title').text('Edit Products');
+
                     $('#id').val(data.id);
                     $('#name').val(data.name);
-                    $('#email').val(data.email);
-                    $('#phone').val(data.email);
-                    $('#password').removeAttr('required');;
-                    $('#password-confirm').removeAttr('required');;
-                  
+                    $('#harga').val(data.harga);
+                    $('#qty').val(data.qty);
+                    $('#category_id').val(data.category_id);
                 },
                 error : function() {
                     alert("Nothing Data");
@@ -126,7 +162,7 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then(function () {
                 $.ajax({
-                    url : "{{ url('users') }}" + '/' + id,
+                    url : "{{ url('products') }}" + '/' + id,
                     type : "POST",
                     data : {'_method' : 'DELETE', '_token' : csrf_token},
                     success : function(data) {
@@ -154,8 +190,8 @@
             $('#modal-form form').validator().on('submit', function (e) {
                 if (!e.isDefaultPrevented()){
                     var id = $('#id').val();
-                    if (save_method == 'add') url = "{{ url('user') }}";
-                    else url = "{{ url('user') . '/' }}" + id;
+                    if (save_method == 'add') url = "{{ url('faculties_products') }}";
+                    else url = "{{ url('faculties_products') . '/' }}" + id;
 
                     $.ajax({
                         url : url,

@@ -4,7 +4,7 @@
     <br>
 
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
+    <section class="sidebar left_contentlist">
  
         <!-- Sidebar user panel (optional) -->
       
@@ -22,30 +22,31 @@
         <!-- /.search form -->
 
         <!-- Sidebar Menu -->
-        <ul class="sidebar-menu" data-widget="tree">
+        <div class="itemconfiguration ">
+        <ul class="sidebar-menu  "  data-widget="tree">
             <!-- <li class="header">Functions</li> -->
             <!-- Optionally, you can add icons to the links -->
-            <li class="nav-header"> <a href="#" style="color:#b8c7ce;"><span>Main Menu </span></a></li>
+            @if(auth()->user()->role == 'admin')
+            <li class="nav-header "> <a href="#" style="color:#b8c7ce;"><span>Main Menu </span></a></li>
             <li><a href="{{ url('/home') }}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
             <li><a href="{{ route('faculties.index') }}"><i class="fa fa-user-secret"></i> <span>Faculties</span></a></li>
-            <li><a href="{{ route('user.index') }}"><i class="fa fa-users"></i> <span>Create Users</span></a></li>
-            <li><a href="{{ route('categories.index') }}"><i class="fa fa-list"></i> <span>Category</span></a></li>
-            <li><a href="{{ route('products.index') }}"><i class="fa fa-cubes"></i> <span>Product</span></a></li>
-            <!-- <li><a href="{{ route('customers.index') }}"><i class="fa fa-users"></i> <span>Customer</span></a></li>
-            <li class="nav-header">Main Menu</li>
-            <li><a href="{{ route('sales.index') }}"><i class="fa fa-cart-plus"></i> <span>Penjualan</span></a></li>
-            <li><a href="{{ route('suppliers.index') }}"><i class="fa fa-truck"></i> <span>Supplier</span></a></li>
-            <li><a href="{{ route('productsOut.index') }}"><i class="fa fa-minus"></i> <span>Outgoing Products</span></a></li>
-            <li><a href="{{ route('productsIn.index') }}"><i class="fa fa-cart-plus"></i> <span>Purchase Products</span></a></li> -->
-
-
-
-
-
-
-
-
+            <li><a href="{{ route('user.index') }}"><i class="fa fa-users"></i> <span>Users</span></a></li>
+            @endif
+            <li class="nav-header "> <a href="#" style="color:#b8c7ce;"><span>Work Space</span></a></li>
+            <li><a href="{{ route('categories.index') }}"><i class="fa fa-list"></i> <span>Categories</span></a></li>
+            <li><a href="{{ route('units.index') }}"><i class="fa fa-th-large"></i> <span>Units</span></a></li>
+            @if(auth()->user()->role == 'admin')
+            <li><a href="{{ route('faculties_products.index') }}"><i class="fa fa-cubes"></i> <span>All Faculties Procudcts </span></a></li>
+            @endif
+            <li><a href="{{ route('products.index') }}"><i class="fa fa-cubes"></i> <span>My Products</span></a></li>
+            <li class="nav-header "> <a href="#" style="color:#b8c7ce;"><span>Transactions </span></a></li>
+            <li><a href="#"><i class="fa fa-cubes"></i> <span>Requests</span></a></li>
+            
+        
         </ul>
+    </div>
+    <button class="btn btn-primary pull-right">Log out</button>
+        
         <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->

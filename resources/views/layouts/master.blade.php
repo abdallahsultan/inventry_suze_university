@@ -5,7 +5,7 @@
     <!-- Log on to codeastro.com for more projects! -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>I M S</title>
+    <title>Inventory</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -26,6 +26,61 @@
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect. -->
     <link rel="stylesheet" href="{{ asset('assets/dist/css/skins/skin-custom.css')}} ">
+    <style>
+        .filter_section{
+            border: 2px solid #065182;
+            border-radius: 12px;
+            /* background: #065182; */
+            background:  linear-gradient(155deg, rgb(98 156 225 / 61%) 41%, rgb(166 198 236 / 58%) 56%, rgb(238 174 202 / 53%) 100%);
+            color: #fff;
+            width: 75%;
+            margin: 1%;
+            left: 10%;
+            position: relative;
+
+        }
+        th {text-align:center}
+        /* width */
+        ::-webkit-scrollbar {
+        width: 10px;
+        }
+        thead{
+            background: #b9c8d1;
+            color: #065182;
+            height: 58px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px #065182;
+        border-radius: 10px;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+        background: #065182;
+        border-radius: 10px;
+        }
+      .itemconfiguration
+        {
+                height:480px;
+                width:215px;
+                /* background-color:#CCC; */		
+                overflow-y:auto;
+                float:left;
+                position:relative;
+                /* margin-left:-5px; */
+        }
+        .left_contentlist{
+        width:215px;
+        float:left;
+        padding:0 0 0 5px;
+        position:relative;
+        float:left;
+        /* border-right: 1px #f8f7f3 solid; */
+        /* background-image:url(images/bubble.png); */
+        /* background-color: black; */
+        }</style>
 
     @yield('top')
 
@@ -42,7 +97,7 @@
             <!-- Logo -->
             <a href="#" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>I</b>MS</span>
+                <span class="logo-mini"></span>
                 <!-- logo for regular state and mobile devices -->
                 <span class="logo-lg"><img src="{{ asset('assets/img/inner-logo.png') }}"
                         style="padding: 2%; width: 26%;border-radius: 20%;" alt="Inventory"><b>Inventory</b> <br><br></span>
@@ -227,6 +282,72 @@
     <script src="{{  asset('assets/dist/js/adminlte.min.js') }}"></script>
 
     @yield('bot')
+    
+		
+@if(session()->has('success'))
+		
+		<script>
+			// swal("Good job!", "asfasfasfas", "success");
+            alert('error_page4')
+swal({
+position: 'top-end',
+icon: 'success',
+title: '<?php echo session()->get('success') ?>',
+showConfirmButton: false,
+timer: 1500
+})
+
+   </script>
+
+@endif
+		
+@if(session()->has('message'))
+		
+		<script>
+			// swal("Good job!", "asfasfasfas", "success");
+            swal({
+                    title: 'Success!',
+                    text: '<?php echo session()->get('message') ?>',
+                    type: 'success',
+                    timer: '1500'
+                })
+
+
+   </script>
+
+@endif
+@if(session()->has('error'))
+		
+		<script>
+			// swal("Good job!", "asfasfasfas", "success");
+            swal({
+                            title: 'Oops...',
+                            text: '<?php echo session()->get('error') ?>',
+                            type: 'error',
+                            timer: '2000'
+                        })
+
+
+   </script>
+
+@endif
+@if(session()->has('error_page'))
+		
+		<script>
+            alert('error_page')
+			// swal("Good job!", "asfasfasfas", "success");
+swal({
+  icon: 'error',
+  title: 'Oops...',
+  text: '<?php echo session()->get('error_page') ?>',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+
+   </script>
+
+@endif
+
+
 </body>
 
 </html>

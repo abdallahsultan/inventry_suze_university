@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Faculty;
-use App\Exports\ExportFaculties;
+use PDF;
+use App\Unit;
+use App\Category;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Datatables;
-use PDF;
+use App\Exports\ExportCategories;
 
-class FacultyController extends Controller
+class UnitController extends Controller
 {
     public function __construct()
     {
@@ -19,10 +20,16 @@ class FacultyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $faculties = Faculty::all();
-        return view('faculties.index');
+        $units = Unit::all();
+        if($request->ajax()){
+            return response()->json([
+                
+                'units'    => $units
+             ]);
+        }
+        return view('units.index');
     }
 
     /**
@@ -43,17 +50,15 @@ class FacultyController extends Controller
      */
     public function store(Request $request)
     {
-        // dd('asdasdasd');
         $this->validate($request, [
            'name'   => 'required|string|min:2'
         ]);
-        
 
-        Faculty::create($request->all());
+        Unit::create($request->all());
 
         return response()->json([
            'success'    => true,
-           'message'    => 'faculties Created'
+           'message'    => 'untis Created'
         ]);
     }
 
@@ -76,8 +81,8 @@ class FacultyController extends Controller
      */
     public function edit($id)
     {
-        $Faculty = Faculty::find($id);
-        return $Faculty;
+        $Unit = Unit::find($id);
+        return $Unit;
     }
 
     /**
@@ -93,13 +98,13 @@ class FacultyController extends Controller
             'name'   => 'required|string|min:2'
         ]);
 
-        $Faculty = Faculty::findOrFail($id);
+        $Unit = Unit::findOrFail($id);
 
-        $Faculty->update($request->all());
+        $Unit->update($request->all());
 
         return response()->json([
             'success'    => true,
-            'message'    => 'faculties Update'
+            'message'    => 'Unit Update'
         ]);
     }
 
@@ -111,38 +116,35 @@ class FacultyController extends Controller
      */
     public function destroy($id)
     {
-        Faculty::destroy($id);
+        Unit::destroy($id);
 
         return response()->json([
             'success'    => true,
-            'message'    => 'faculties Delete'
+            'message'    => 'Unit Delete'
         ]);
     }
 
-    public function apiFaculties()
+    public function apiUnits()
     {
-        $faculties = Faculty::all();
+        $units = Unit::all();
 
-        return Datatables::of($faculties)
-            ->addColumn('action', function($faculties){
-                if($faculties->fixed){
-                    return '';
-                }
-                return '<a onclick="editForm('. $faculties->id .')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
-                    '<a onclick="deleteData('. $faculties->id .')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
+        return Datatables::of($units)
+            ->addColumn('action', function($units){
+                return '<a onclick="editForm('. $units->id .')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
+                    '<a onclick="deleteData('. $units->id .')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
             })
             ->rawColumns(['action'])->make(true);
     }
 
-    public function exportFacultiesAll()
+    public function exportUnitsAll()
     {
-        $faculties = Faculty::all();
-        $pdf = PDF::loadView('faculties.facultiesAllPDF',compact('faculties'));
-        return $pdf->download('faculties.pdf');
+        $units = Unit::all();
+        $pdf = PDF::loadView('untis.CategoriesAllPDF',compact('untis'));
+        return $pdf->download('untis.pdf');
     }
 
     public function exportExcel()
     {
-        return (new ExportFaculties())->download('Faculties.xlsx');
+        return (new ExportCategories())->download('untis.xlsx');
     }
 }

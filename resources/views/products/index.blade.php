@@ -7,14 +7,54 @@
 @endsection
 
 @section('content')
+
+<div class="box box-success">
+
+   
+    <div class="box-header">
+        <h3 class="box-title">List of Products @if(auth()->user()) ( {{auth()->user()->faculty->name}} ) @endif</h3>
+
+        <a  href="{{ route('products.create') }}" class="btn btn-primary pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a>
+        {{-- <a onclick="addForm()" class="btn btn-success pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a> --}}
+    </div>
+
+
+
+</div>
+
+    <!-- /.box-header -->
+    <div class="box-body filter_section">
+        <div class="form-group">
+          
+            <div class="col-md-3">
+                <label for="name">Item ID :</label>
+                <input type="number" class="form-control"
+                    id="kt_datatable_search_query0" name="id" 
+                    placeholder="Item ID">
+               
+            </div>
+            <div class="col-md-3">
+                <label for="name">Item Name :</label>
+                <input type="text" class="form-control"
+                    id="kt_datatable_search_query" name="name" 
+                    placeholder="Name">
+                
+            </div>
+      
+            <div class="col-md-3">
+                <label for="faculty_id">Category:</label>
+                
+                {!! Form::select('category_id', $categories, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Category --', 'id' => 'kt_datatable_search_query1', 'required']) !!}
+                <span class="help-block with-errors"></span>
+            </div>
+            
+           
+        </div>
+    </div>
+    <!-- /.box-body -->
     <div class="box box-success">
 
-        <div class="box-header">
-            <h3 class="box-title">List of Products</h3>
-
-            <a onclick="addForm()" class="btn btn-success pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a>
-        </div>
-
+      
 
         <!-- /.box-header -->
         <div class="box-body">
@@ -23,9 +63,10 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <!-- <th>Price</th> -->
-                    <th>Qty.</th>
-                    <th>Image</th>
+                    <th>type.</th>
+                    <th>Qty</th>
+                    <th>Monitor inventory auto</th>
+                    <th>Minimum Qty</th>
                     <th>Category</th>
                     <th>Actions</th>
                 </tr>
@@ -36,7 +77,6 @@
         <!-- /.box-body -->
     </div>
 
-    @include('products.form')
 
 @endsection
 
@@ -64,20 +104,42 @@
     {{--</script>--}}
 
     <script type="text/javascript">
+    
         var table = $('#products-table').DataTable({
             processing: true,
             serverSide: true,
+            // dom: 'lrtip',
             ajax: "{{ route('api.products') }}",
             columns: [
                 {data: 'id', name: 'id'},
-                {data: 'nama', name: 'nama'},
-                // {data: 'harga', name: 'harga'},
+                {data: 'name', name: 'name'},
+                {data: 'type', name: 'type'},
                 {data: 'qty', name: 'qty'},
-                {data: 'show_photo', name: 'show_photo'},
+                {data: 'my_monitor_inventory_auto', name: 'my_monitor_inventory_auto'},
+                {data: 'my_minimum_qty', name: 'my_minimum_qty'},
+                // {data: 'show_photo', name: 'show_photo'},
                 {data: 'category_name', name: 'category_name'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
+
+        
+$('#kt_datatable_search_query1').change(function() {
+    
+    $('#products-table').DataTable().column(6).search($('#kt_datatable_search_query1 option:selected').html()).draw();
+
+});
+$('#kt_datatable_search_query').keyup(function() {
+  
+    $('#products-table').DataTable().column(1).search($(this).val()).draw();
+
+});
+$('#kt_datatable_search_query0').keyup(function() {
+  
+    $('#products-table').DataTable().column(0).search($(this).val()).draw();
+
+});
+
 
         function addForm() {
             save_method = "add";
@@ -100,7 +162,7 @@
                     $('.modal-title').text('Edit Products');
 
                     $('#id').val(data.id);
-                    $('#nama').val(data.nama);
+                    $('#name').val(data.name);
                     $('#harga').val(data.harga);
                     $('#qty').val(data.qty);
                     $('#category_id').val(data.category_id);

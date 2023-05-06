@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\AdminProductController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,6 +36,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/apiCategories', 'CategoryController@apiCategories')->name('api.categories');
 	Route::get('/exportCategoriesAll', 'CategoryController@exportCategoriesAll')->name('exportPDF.categoriesAll');
 	Route::get('/exportCategoriesAllExcel', 'CategoryController@exportExcel')->name('exportExcel.categoriesAll');
+	
+	Route::resource('units', 'UnitController');
+	Route::get('/apiUnits', 'UnitController@apiUnits')->name('api.units');
+	Route::get('/exportUnitsAll', 'UnitController@exportUnitsAll')->name('exportPDF.unitsAll');
+	Route::get('/exportUnitsAllExcel', 'UnitController@exportExcel')->name('exportExcel.unitsAll');
 
 	Route::resource('customers', 'CustomerController');
 	Route::get('/apiCustomers', 'CustomerController@apiCustomers')->name('api.customers');
@@ -52,6 +60,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/exportSupplierssAll', 'SupplierController@exportSuppliersAll')->name('exportPDF.suppliersAll');
 	Route::get('/exportSuppliersAllExcel', 'SupplierController@exportExcel')->name('exportExcel.suppliersAll');
 
+	Route::resource('faculties_products', 'Admin\AdminProductController');
+	Route::get('/apiFaculties_products/{id}', 'Admin\AdminProductController@details')->name('api.faculties_productdetials');
+	Route::get('/apiFacultiesProducts', 'Admin\AdminProductController@apiProducts')->name('api.faculties_products');
 	Route::resource('products', 'ProductController');
 	Route::get('/apiProducts', 'ProductController@apiProducts')->name('api.products');
 

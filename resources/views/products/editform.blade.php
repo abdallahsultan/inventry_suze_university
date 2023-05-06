@@ -5,31 +5,27 @@
 
                     <div class="box-body">
                         <div class="form-group">
+                            
                             <div class="col-sm-2">
-                            <label><input type="radio" name="add_type" checked="checked" value="select">Select Product</label> 
+                            <label><input type="radio" name="q_type"  value="in"> Increase</label> 
                             </div> 
                             <div class="col-sm-2">
-                            <label><input type="radio" name="add_type" value="add">Add New</label> 
+                            <label><input type="radio" name="q_type" value="out"> Decrease</label> 
+                            </div> 
+                            <div class="col-sm-5">
+                            <label><input type="radio" name="q_type" checked="checked" value="none"> Update Minimum Quantity Or  Monitor inventory quantity  Only</label> 
                             </div> 
                            
                         </div>
-                        <div class="form-group select_type">
-                            <div class="col-md-2">
-                                <label for="product_id">Product :</label>
-                            </div>
-                            <div class="col-md-4">
-                                {!! Form::select('product_id', $products, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Product --', 'id' => 'product_id','required']) !!}
-                                <span class="help-block with-errors"></span>
-                            </div>
-                        </div>
-                        <div class="add_new_type" style="display:none;">
+                        
+                        {{-- <div class="add_new_type" style="display:none;">
                             <div class="form-group">
                                 <div class="col-sm-2">
                                     <label for="name">Item Name :</label>
                                 </div>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
-                                        id="name" name="name" value="{{ old('name') }}"
+                                        id="name" name="name" value="{{ $product->name ?? old('name') }}"
                                         placeholder="Name">
                                     @if ($errors->has('name'))
                                     <span class="invalid-feedback" role="alert">
@@ -54,11 +50,10 @@
                                     <label for="unit_id">Unit :</label>
                                 </div>
                                 <div class="col-md-4">
-                                    {!! Form::select('unit_id',[], null, ['class' => 'form-control select', 'placeholder' => '-- Choose Unit --', 'id' => 'unit_id']) !!}
+                                    {!! Form::select('unit_id', $units, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Unit --', 'id' => 'unit_id']) !!}
                                     <span class="help-block with-errors"></span>
                                 </div>
-                              
-                                <a onclick="addunitForm()"><i class="fa fa-plus-square" aria-hidden="true"></i></a>
+                                <a href="#"><i class="fa fa-plus-square" aria-hidden="true"></i></a>
                                 
                             </div>
                         
@@ -82,18 +77,19 @@
                                     <label for="type">Type :</label>
                                 </div>
                                 <div class="col-md-4">
-                                    {!! Form::select('type',['fixed'=>'fixed','perishable'=>'consumed'], null, ['class' => 'form-control select', 'placeholder' => '-- Choose Type --', 'id' => 'type']) !!}
+                                    {!! Form::select('type',['fixed'=>'fixed','preishable'=>'consumed'], null, ['class' => 'form-control select', 'placeholder' => '-- Choose Type --', 'id' => 'type']) !!}
                                     <span class="help-block with-errors"></span>
                                 </div>   
                             </div>
-                        </div>
-                        <div class="form-group">
+                        </div> --}}
+                        <div class="form-group quantity" style="display:none; ">
                             <div class="col-md-2">
-                                <label for="qty">quantity :</label>
+                                <label id="increase_decrease"></label>
+                                <label for="qty">Sum quantities ({{$product->qty}}) :</label>
                             </div>
                             <div class="col-md-4">
                                 <input type="text" class="form-control{{ $errors->has('qty') ? ' is-invalid' : '' }}"
-                                    id="qty" name="qty" value="{{ old('qty') }}" 
+                                    id="qty" name="qty" value="{{  old('qty') }}" 
                                     placeholder="qty">
                                 @if ($errors->has('qty'))
                                 <span class="invalid-feedback" role="alert">
@@ -104,7 +100,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-12 offset-1">
-                                <input id="showprompt monitor_inventory_auto" type="checkbox"  name="monitor_inventory_auto" value="1"  onclick="ShowPrompt(this.checked)" />
+                                <input id="showprompt monitor_inventory_auto" type="checkbox"  name="monitor_inventory_auto" value="1" @if($product->my_monitor_inventory_auto) checked="checked" @endif  onclick="ShowPrompt(this.checked)" />
                                 <label for="monitor_inventory_auto"> Monitor inventory quantity automatically</label><br>
                             </div>
                         </div>
@@ -114,7 +110,7 @@
                             </div>
                             <div class="col-md-4">
                                 <input type="text" class="form-control{{ $errors->has('minimum_qty') ? ' is-invalid' : '' }}"
-                                    id="minimum_qty" name="minimum_qty" value="{{ old('minimum_qty') }}" 
+                                    id="minimum_qty" name="minimum_qty" value="{{$product->my_minimum_qty?? old('minimum_qty') }}" 
                                     placeholder="minimum_quantity">
                                 @if ($errors->has('minimum_qty'))
                                 <span class="invalid-feedback" role="alert">
@@ -142,8 +138,6 @@
                     <!-- /.box-body -->
 
                 </div>
-
-               
 @section('bot')
               
     <script>
@@ -156,111 +150,33 @@
 
     //         }
     //     }
-    $(document).ready(function() {
-        getunit();
-    });
 
+    $('input[name=q_type]').on('change', function() {
+     
+        if($("input[type='radio']:checked").val() == 'in'){
+            
+            $("#increase_decrease ").html('Increase Qty :');
+            $(".quantity ").show();
+            $(".quantity input").attr('required',true);
     
-function getunit(){
-  
-  let url="{{ route('units.index') }}";
-  $.ajax({
-      type: "GET",
-      dataType: 'json',
-      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-      url: url,
-      success: function(result) {
-          console.log(result.units);
-          if (result) {
-           
-              var html_units = '';
-              var html_units = '<option >-- Choose Unit --</option>';
-              $.each(result.units, function(key, value) {
-                
-              html_units += '<option   value="' + result.units[key].id + '" >' + result.units[key].name + '  </option>';
-                  
-              });
-             
-              
-
-              $('#unit_id').html(html_units);
-             
-          
-          }
-      },
-      error: function(error, jqXHR, exception) {
-          Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: exception,
-              // footer: '<a href="">Why do I have this issue?</a>'
-          })
-      }
-  });
-}
-    function addunitForm() {
-            save_method = "add";
-            $('input[name=_method]').val('POST');
-            $('#unit-modal-form').modal('show');
-            $('#unit-modal-form form')[0].reset();
-            $('.unit-modal-title').text('Add units');
-        }
-
-    $('input[name=add_type]').on('change', function() {
-    
-        if($("input[type='radio']:checked").val() == 'add'){
-            $(".select_type").hide();
-        $(".add_new_type").show();
-        $(".add_new_type input").attr('required',true);
-        $(".select_type input").attr('required',false);
-        $("#product_id").attr('required',false);
        
+        }
+        else if($("input[type='radio']:checked").val() == 'out')
+        {
+            $("#increase_decrease ").html('Decrease Qty :');
+            $(".quantity ").show();
+            $(".quantity input").attr('required',true);
         }else{
 
-           
-            $("#product_id").attr('required',true);
-            $(".select_type input").attr('required',true);
-            $(".add_new_type input").attr('required',false);
-            $(".add_new_type").hide();
-            $(".select_type").show();
+            $("#increase_decrease ").html('');
+            $(".quantity ").hide();
+            $(".quantity input").attr('required',false);
+          
         }
        
     });
     
-    function submitunitform(){
-                  
-        var id = $('#id').val();
-        // if (save_method == 'add') url = "{{ url('units') }}";
-        // else url = "{{ url('units') . '/' }}" + id;
-        url = "{{ url('units') }}";
-        $.ajax({ 
-            url : url,
-            type : "POST",
-            data: new FormData($("#unit-modal-form form")[0]),
-            contentType: false,
-            processData: false,
-            success : function(data) {
-                $('#unit-modal-form').modal('hide');
-                swal({
-                    title: 'Success!',
-                    text: data.message,
-                    type: 'success',
-                    timer: '1500'
-                })
-            },
-            error : function(data){
-                swal({
-                    title: 'dsasadOops...',
-                    text: data.message,
-                    type: 'error',
-                    timer: '1500'
-                })
-            }
-        });
-        return false;
-    
-          
-        }
+        
     </script>
 @endsection
                 
