@@ -13,43 +13,43 @@
         <div class="box-header">
             <h3 class="box-title">List of  ALl Products </h3>
 
-            <a  href="{{ route('faculties_products.create') }}" class="btn btn-primary pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a>
-            {{-- <a onclick="addForm()" class="btn btn-success pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a> --}}
+            <a  href="{{ route('faculties_products.create') }}" class="btn btn-outline-primary pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a>
+            {{-- <a onclick="addForm()" class="btn btn-outline-primary pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a> --}}
         </div>
 
 
     </div>
     
         <!-- /.box-header -->
-        <div class="box-body filter_section">
-            <div class="form-group">
-              
-                <div class="col-md-3">
-                    <label for="name">Item ID :</label>
-                    <input type="text" class="form-control"
-                        id="id" name="id" 
-                        placeholder="Item ID">
-                   
-                </div>
-                <div class="col-md-3">
-                    <label for="name">Item Name :</label>
-                    <input type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
-                        id="name" name="name" 
-                        placeholder="Name">
-                    
-                </div>
+    <div class="box-body filter_section">
+        <div class="form-group">
           
-                <div class="col-md-3">
-                    <label for="faculty_id">Category:</label>
-                    
-                    {!! Form::select('category_id', $categories, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Category --', 'id' => 'category_id', 'required']) !!}
-                    <span class="help-block with-errors"></span>
-                </div>
-                
+            <div class="col-md-3">
+                <label for="name">Item ID :</label>
+                <input type="number" class="form-control"
+                    id="kt_datatable_search_query0" name="id" 
+                    placeholder="Item ID">
                
             </div>
+            <div class="col-md-3">
+                <label for="name">Item Name :</label>
+                <input type="text" class="form-control"
+                    id="kt_datatable_search_query" name="name" 
+                    placeholder="Name">
+                
+            </div>
+      
+            <div class="col-md-3">
+                <label for="faculty_id">Category:</label>
+                
+                {!! Form::select('category_id', $categories, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Category --', 'id' => 'kt_datatable_search_query1', 'required']) !!}
+                <span class="help-block with-errors"></span>
+            </div>
+            
+           
         </div>
-        <!-- /.box-body -->
+    </div>
+    <!-- /.box-body -->
     <div class="box box-success">
 
 
@@ -110,7 +110,7 @@
                 {data: 'id', name: 'id'},
                 {data: 'name', name: 'name'},
                 {data: 'type', name: 'type'},
-                {data: 'qty', name: 'qty'},
+                {data: 'all_qty', name: 'all_qty'},
                 {data: 'monitor_inventory_auto', name: 'monitor_inventory_auto'},
                 {data: 'minimum_qty', name: 'minimum_qty'},
                 // {data: 'show_photo', name: 'show_photo'},
@@ -118,6 +118,28 @@
                 {data: 'action', name: 'action',orderable: false, searchable: false}
             ]
         });
+
+              
+$('#kt_datatable_search_query1').change(function() {
+    if($('#kt_datatable_search_query1 option:selected').html() == '-- Choose Category --'){
+        $('#products-table').DataTable().column(6).search('').draw();
+    }else{
+        $('#products-table').DataTable().column(6).search($('#kt_datatable_search_query1 option:selected').html()).draw();
+
+    }
+
+});
+$('#kt_datatable_search_query').keyup(function() {
+  
+    $('#products-table').DataTable().column(1).search($(this).val()).draw();
+
+});
+$('#kt_datatable_search_query0').keyup(function() {
+  
+    $('#products-table').DataTable().column(0).search($(this).val()).draw();
+
+});
+
 
         function addForm() {
             save_method = "add";

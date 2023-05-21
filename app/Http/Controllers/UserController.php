@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Exports\ExportSuppliers;
 use App\Imports\SuppliersImport;
 use Yajra\DataTables\DataTables;
+use Validator;
+
 
 class UserController extends Controller {
 	public function __construct() {
@@ -90,7 +92,7 @@ class UserController extends Controller {
 	public function update(Request $request, $id) {
 		$this->validate($request, [
 			'name' => 'required|string|min:2',
-			'email' => 'required|string|email|max:255|unique:suppliers',
+			'email' => 'required|string|email|max:255|unique:users',
 		]);
 
 		$users = User::findOrFail($id);
@@ -106,6 +108,45 @@ class UserController extends Controller {
 			'success' => true,
 			'message' => 'user Updated',
 		]);
+	}
+	public function editprofile() {
+		$user=auth()->user();
+		if($user->role == 'admin'){
+			$faculty = Faculty::orderBy('name','ASC')
+            ->get()
+            ->pluck('name','id');
+		}else{
+			$faculty = Faculty::where('id',auth()->user()->id)->orderBy('name','ASC')
+            ->get()
+            ->pluck('name','id');
+		}
+		
+		return view('user.profile',compact('faculty','user'));
+	}
+	public function update_profile(Request $request) {
+		// dd($request->all());
+		$validator = Validator::make($request->all(), [
+			'name' => 'required|string|min:2',
+			'email' => 'required|string|email|max:255|unique:users,email,'.auth()->user()->id,
+			'phone' => 'required|string|max:18|unique:users,phone,'.auth()->user()->id,
+			'password'   => 'sometimes|confirmed',
+		]);
+
+		if ($validator->fails()) {
+            return    back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+		$users = auth()->user();
+		$data=$request->all();
+		if(!$request->password){
+         $data=$request->except('password','password_confirmation');
+		}else{
+		$data['password']=bcrypt($request->password);	
+		}
+		$users->update($data);
+
+		return back()->with('message', 'Profile Updated');
 	}
 
 	/**

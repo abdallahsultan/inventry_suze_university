@@ -2187,11 +2187,12 @@ a:focus {
  * Component: Button
  * -----------------
  */
+ 
 .btn {
   border-radius: 3px;
   -webkit-box-shadow: none;
   box-shadow: none;
-  border: 1px solid transparent;
+  /* border: 1px solid transparent; */
 }
 .btn.uppercase {
   text-transform: uppercase;

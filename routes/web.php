@@ -42,23 +42,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/exportUnitsAll', 'UnitController@exportUnitsAll')->name('exportPDF.unitsAll');
 	Route::get('/exportUnitsAllExcel', 'UnitController@exportExcel')->name('exportExcel.unitsAll');
 
-	Route::resource('customers', 'CustomerController');
-	Route::get('/apiCustomers', 'CustomerController@apiCustomers')->name('api.customers');
-	Route::post('/importCustomers', 'CustomerController@ImportExcel')->name('import.customers');
-	Route::get('/exportCustomersAll', 'CustomerController@exportCustomersAll')->name('exportPDF.customersAll');
-	Route::get('/exportCustomersAllExcel', 'CustomerController@exportExcel')->name('exportExcel.customersAll');
-
-	Route::resource('sales', 'SaleController');
-	Route::get('/apiSales', 'SaleController@apiSales')->name('api.sales');
-	Route::post('/importSales', 'SaleController@ImportExcel')->name('import.sales');
-	Route::get('/exportSalesAll', 'SaleController@exportSalesAll')->name('exportPDF.salesAll');
-	Route::get('/exportSalesAllExcel', 'SaleController@exportExcel')->name('exportExcel.salesAll');
-
-	Route::resource('suppliers', 'SupplierController');
-	Route::get('/apiSuppliers', 'SupplierController@apiSuppliers')->name('api.suppliers');
-	Route::post('/importSuppliers', 'SupplierController@ImportExcel')->name('import.suppliers');
-	Route::get('/exportSupplierssAll', 'SupplierController@exportSuppliersAll')->name('exportPDF.suppliersAll');
-	Route::get('/exportSuppliersAllExcel', 'SupplierController@exportExcel')->name('exportExcel.suppliersAll');
 
 	Route::resource('faculties_products', 'Admin\AdminProductController');
 	Route::get('/apiFaculties_products/{id}', 'Admin\AdminProductController@details')->name('api.faculties_productdetials');
@@ -66,18 +49,30 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('products', 'ProductController');
 	Route::get('/apiProducts', 'ProductController@apiProducts')->name('api.products');
 
-	Route::resource('productsOut', 'ProductKeluarController');
-	Route::get('/apiProductsOut', 'ProductKeluarController@apiProductsOut')->name('api.productsOut');
-	Route::get('/exportProductKeluarAll', 'ProductKeluarController@exportProductKeluarAll')->name('exportPDF.productKeluarAll');
-	Route::get('/exportProductKeluarAllExcel', 'ProductKeluarController@exportExcel')->name('exportExcel.productKeluarAll');
-	Route::get('/exportProductKeluar/{id}', 'ProductKeluarController@exportProductKeluar')->name('exportPDF.productKeluar');
+	Route::get('/products_inquiries', 'ProductController@inquiries')->name('products.inquiries');
+	Route::get('/apiFaculties_products_inquiries/{id}', 'ProductController@details')->name('api.faculties_productdetials_inquiries');
+	Route::get('/apiFacultiesproducts_inquiries', 'ProductController@apiProductsinquiries')->name('api.faculties_products_inquiries');
+	
+	Route::resource('depreciations', 'DepreciationController');
+	Route::get('/apiDepreciations', 'DepreciationController@apiDepreciations')->name('api.depreciations');
+	Route::get('/exportDepreciationsAll', 'DepreciationController@exportExcel')->name('exportExcel.depreciationsAll');
+	Route::get('/exportDepreciationsAllExcel', 'DepreciationController@exportDepreciationsAll')->name('exportPDF.DepreciationsAll');
 
-	Route::resource('productsIn', 'ProductMasukController');
-	Route::get('/apiProductsIn', 'ProductMasukController@apiProductsIn')->name('api.productsIn');
-	Route::get('/exportProductMasukAll', 'ProductMasukController@exportProductMasukAll')->name('exportPDF.productMasukAll');
-	Route::get('/exportProductMasukAllExcel', 'ProductMasukController@exportExcel')->name('exportExcel.productMasukAll');
-	Route::get('/exportProductMasuk/{id}', 'ProductMasukController@exportProductMasuk')->name('exportPDF.productMasuk');
+	Route::resource('requests', 'RequestController');
+	Route::get('/ReceivedRequests', 'RequestController@index_received')->name('requests.index_received');
+	Route::get('/apiRequests', 'RequestController@apiRequests')->name('api.requests');
+	Route::get('/apiReceivedRequests', 'RequestController@apiReceivedRequests')->name('api.received_requests');
+	Route::get('/exportRequestsAll', 'RequestController@exportRequestsAll')->name('exportPDF.requestsAll');
+	Route::get('/exportRequestsAllExcel', 'RequestController@exportExcel')->name('exportExcel.requestsAll');
 
+	Route::post('/requests/reciver/cancel', 'RequestController@cancel_request_reciver')->name('requests.cancel_reciver');
+	Route::post('/requests/reciver/confirm', 'RequestController@confirm_request_reciver')->name('requests.confirm_reciver');
+	Route::post('/requests/senter/cancel', 'RequestController@cancel_request_senter')->name('requests.cancel_senter');
+
+	
 	Route::resource('user', 'UserController');
 	Route::get('/apiUser', 'UserController@apiUsers')->name('api.users');
+	Route::get('/editprofile', 'UserController@editprofile')->name('edit.profile');
+	Route::post('/update_profile', 'UserController@update_profile')->name('update.profile');
+	Route::post('/settings', 'HomeController@setting')->name('settings');
 });

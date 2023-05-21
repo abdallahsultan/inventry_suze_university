@@ -20,36 +20,36 @@
 
     </div>
     
-        <!-- /.box-header -->
-        <div class="box-body filter_section">
-            <div class="form-group">
-              
-                <div class="col-md-3">
-                    <label for="name">Item ID :</label>
-                    <input type="text" class="form-control"
-                        id="id" name="id" 
-                        placeholder="Item ID">
-                   
-                </div>
-                <div class="col-md-3">
-                    <label for="name">Item Name :</label>
-                    <input type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
-                        id="name" name="name" 
-                        placeholder="Name">
-                    
-                </div>
+         <!-- /.box-header -->
+    {{-- <div class="box-body filter_section">
+        <div class="form-group">
           
-                <div class="col-md-3">
-                    <label for="faculty_id">Category:</label>
-                    
-                    {!! Form::select('category_id', $categories, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Category --', 'id' => 'category_id', 'required']) !!}
-                    <span class="help-block with-errors"></span>
-                </div>
-                
+            <div class="col-md-3">
+                <label for="name">Item ID :</label>
+                <input type="number" class="form-control"
+                    id="kt_datatable_search_query0" name="id" 
+                    placeholder="Item ID">
                
             </div>
+            <div class="col-md-3">
+                <label for="name">Item Name :</label>
+                <input type="text" class="form-control"
+                    id="kt_datatable_search_query" name="name" 
+                    placeholder="Name">
+                
+            </div>
+      
+            <div class="col-md-3">
+                <label for="faculty_id">Category:</label>
+                
+                {!! Form::select('category_id', $categories, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Categorsdsfy --', 'id' => 'kt_datatable_search_query1', 'required']) !!}
+                <span class="help-block with-errors"></span>
+            </div>
+            
+           
         </div>
-        <!-- /.box-body -->
+    </div> --}}
+    <!-- /.box-body -->
     <div class="box box-success">
 
 
@@ -118,6 +118,26 @@
             ]
         });
 
+         
+$('#kt_datatable_search_query1').change(function() {
+    if($('#kt_datatable_search_query1 option:selected').html() == '-- Choose Category --'){
+        $('#products-table').DataTable().column(6).search('').draw();
+    }else{
+        $('#products-table').DataTable().column(6).search($('#kt_datatable_search_query1 option:selected').html()).draw();
+
+    }
+
+});
+$('#kt_datatable_search_query').keyup(function() {
+  
+    $('#products-table').DataTable().column(1).search($(this).val()).draw();
+
+});
+$('#kt_datatable_search_query0').keyup(function() {
+  
+    $('#products-table').DataTable().column(0).search($(this).val()).draw();
+
+});
         function addForm() {
             save_method = "add";
             $('input[name=_method]').val('POST');

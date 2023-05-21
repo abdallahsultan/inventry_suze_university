@@ -10,14 +10,13 @@
 @section('content')
     <div class="box box-success">
 
+        
+        
         <div class="box-header">
             <h3 class="box-title">List of Categories</h3>
-        </div>
-
-        <div class="box-header">
-            <a onclick="addForm()" class="btn btn-success" ><i class="fa fa-plus"></i> Add a New Category</a>
-            <a href="{{ route('exportPDF.categoriesAll') }}" class="btn btn-danger"><i class="fa fa-file-pdf-o"></i> Export PDF</a>
-            <a href="{{ route('exportExcel.categoriesAll') }}" class="btn btn-primary"><i class="fa fa-file-excel-o"></i> Export Excel</a>
+            <a href="{{ route('exportPDF.categoriesAll') }}" class="btn btn-outline-danger  pull-right" style="margin-right:5px "><i class="fa fa-file-pdf-o"></i> Export PDF</a>
+            <a href="{{ route('exportExcel.categoriesAll') }}" class="btn btn-outline-success  pull-right" style="margin-right:5px "><i class="fa fa-file-excel-o"></i> Export Excel</a>
+            <a onclick="addForm()" class="btn btn-outline-primary  pull-right" style="margin-right:5px " ><i class="fa fa-plus"></i> Add a New Category</a>
         </div>
 
 

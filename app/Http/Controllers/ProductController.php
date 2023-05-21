@@ -9,6 +9,7 @@ use App\Category;
 use App\ProductQuntity;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use PDF;
 
 class ProductController extends Controller
 {
@@ -245,5 +246,95 @@ class ProductController extends Controller
             })
             ->rawColumns(['category_name','show_photo','my_monitor_inventory_auto','action'])->make(true);
 
+    }
+
+
+
+    public function inquiries()
+    {   
+       
+        $user=auth()->user();
+        $categories = Category::orderBy('name','ASC')
+            ->get()
+            ->pluck('name','id');
+
+        // $products = Product::with(['ProductQuntities'])->get();
+        // $product = Product::where('facility_id',auth()->user()->facility->id)->get();
+       
+       
+        return view('products.allProducts', compact('categories'))->with('message', 'Product Created Successfully');
+    }
+
+
+    public function apiProductsinquiries(){
+      
+        $product = Product::all();
+
+        return Datatables::of($product)
+            ->addColumn('category_name', function ($product){
+                return $product->category->name;
+            })
+            ->addColumn('show_photo', function($product){
+                if ($product->image == NULL){
+                    return 'No Image';
+                }
+                return '<img class="rounded-square" width="50" height="50" src="'. url($product->image) .'" alt="">';
+            })
+           
+           
+            ->addColumn('monitor_inventory_auto', function($product){
+                if ($product->monitor_inventory_auto){
+                    return'<p  class="btn btn-success btn-xs"><i class="glyphicon glyphicon-ok"></i> </p> ';
+                }else{
+                    return'<p  class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove"></i></p> ';
+                }
+               
+            })
+            ->addColumn('action', function($product){
+                $link=route('api.faculties_productdetials_inquiries',$product->id);
+                return' ' .
+                    '<a href="'.$link.'" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-th"></i> </a> '.
+                    ' ';
+            })
+            ->rawColumns(['category_name','show_photo','action','monitor_inventory_auto'])->make(true);
+
+    }
+
+    public function details(Request $request,$product_id)
+    {   
+        $product=Product::find($product_id);
+        $categories = Category::orderBy('name','ASC')->get()->pluck('name','id');
+        // $faculty = $product->faculties()->get();
+        // return $faculty;
+        if ($request->ajax()) {
+         
+          
+            // $faculty = $product->faculties()->select('faculties.id','faculties.name')->distinct()->get();
+        
+            $faculty = $product->faculties()->distinct()->get()->makeHidden('pivot','updated_at','created_at');
+            // return $faculty;
+        return Datatables::of($faculty)
+            ->addColumn('qty', function ($faculty)use ($product){
+                return $product->ProductQuntities()->where('faculty_id',$faculty->id)->max('qty');
+            })
+            ->addColumn('minimum_qty', function ($faculty)use ($product){
+                $minimumqty=$product->ProductQuntities()->where('main',1)->first();
+                return $minimumqty->minimum_qty;
+            })
+          
+            ->addColumn('monitor_inventory_auto', function ($faculty) use ($product){
+                $moitorInvenotry=$product->ProductQuntities()->where('main',1)->first();
+               
+                if ($moitorInvenotry->monitor_inventory_auto){
+                    return'<p  class="btn btn-success btn-xs"><i class="glyphicon glyphicon-ok"></i> </p> ';
+                }else{
+                    return'<p  class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-remove"></i></p> ';
+                }
+            })
+            
+            ->rawColumns(['monitor_inventory_auto'])->make(true);
+      }
+
+      return view('products.faculties',compact('categories','product'))->with('message', 'Product Created Successfully');
     }
 }

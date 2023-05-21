@@ -11,7 +11,7 @@
 
         <div class="box-header">
             <h3 class="box-title">List of System Users</h3>
-            <a onclick="addForm()" class="btn btn-primary pull-right" ><i class="fa fa-plus"></i> Add User</a>
+            <a onclick="addForm()" class="btn btn-outline-primary pull-right" style="margin-right:5px " ><i class="fa fa-plus"></i> Add User</a>
             <!-- <a href="/register" class="btn btn-success" ><i class="fa fa-plus"></i> Add User</a> -->
         </div>
 

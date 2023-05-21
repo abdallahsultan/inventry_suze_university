@@ -224,7 +224,10 @@ class AdminProductController extends Controller
         // return $faculty;
         if ($request->ajax()) {
          
-            $faculty = $product->faculties()->get();
+          
+            // $faculty = $product->faculties()->select('faculties.id','faculties.name')->distinct()->get();
+        
+            $faculty = $product->faculties()->distinct()->get()->makeHidden('pivot','updated_at','created_at');
             // return $faculty;
         return Datatables::of($faculty)
             ->addColumn('qty', function ($faculty)use ($product){

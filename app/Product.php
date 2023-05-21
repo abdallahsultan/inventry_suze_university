@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $guarded = ['id'];
-    protected $appends=['qty','monitor_inventory_auto','minimum_qty','my_monitor_inventory_auto','my_minimum_qty'];
+    protected $appends=['qty','all_qty','monitor_inventory_auto','minimum_qty','my_monitor_inventory_auto','my_minimum_qty'];
 
     protected $hidden = ['created_at','updated_at'];
 
@@ -31,14 +31,21 @@ class Product extends Model
         // ->as('fields_values');
     }     
    
+    public function getAllQtyAttribute()
+    {
+        // return $this->hasMany(Product::class)->where('is_active',true);
+        
+        
+            return $this->ProductQuntities()->where('type','in')->sum('qty') - $this->ProductQuntities()->where('type','out')->sum('qty');
+      
+  
+       
+    }
     public function getQtyAttribute()
     {
         // return $this->hasMany(Product::class)->where('is_active',true);
         
-        if(auth()->user()->role == 'admin'){
-            return $this->ProductQuntities()->where('type','in')->sum('qty') - $this->ProductQuntities()->where('type','out')->sum('qty');
-        }
-
+      
         if(auth()->user()->faculty->id){
             return $this->ProductQuntities()->where('faculty_id',auth()->user()->faculty->id)->max('qty');
         }else{
@@ -52,8 +59,8 @@ class Product extends Model
     {
         $user=auth()->user();
         $faculty_id=$user->faculty->id;
-        $minimumqty=$this->ProductQuntities()->where('faculty_id',$faculty_id)->where('main',1)->first();
-         return $minimumqty->minimum_qty;
+        $minimumqty=$this->ProductQuntities()->where('faculty_id',$faculty_id)->where('main',1)->first() ?? null;
+         return $minimumqty->minimum_qty ?? '';
   
        
     }
@@ -62,8 +69,8 @@ class Product extends Model
         $user=auth()->user();
         $faculty_id=$user->faculty->id;
     
-         $moitorInvenotry=$this->ProductQuntities()->where('faculty_id',$faculty_id)->where('main',1)->first();
-         return $moitorInvenotry->monitor_inventory_auto;
+         $moitorInvenotry=$this->ProductQuntities()->where('faculty_id',$faculty_id)->where('main',1)->first() ?? null;
+         return $moitorInvenotry->monitor_inventory_auto ?? '';
      
        
        

@@ -14,8 +14,8 @@
     <div class="box-header">
         <h3 class="box-title">List of Products @if(auth()->user()) ( {{auth()->user()->faculty->name}} ) @endif</h3>
 
-        <a  href="{{ route('products.create') }}" class="btn btn-primary pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a>
-        {{-- <a onclick="addForm()" class="btn btn-success pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a> --}}
+        <a  href="{{ route('products.create') }}" class="btn btn-outline-primary pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a>
+        {{-- <a onclick="addForm()" class="btn btn-outline-primary pull-right" style="margin-top: -8px;"><i class="fa fa-plus"></i> Add Products</a> --}}
     </div>
 
 
@@ -125,8 +125,12 @@
 
         
 $('#kt_datatable_search_query1').change(function() {
-    
-    $('#products-table').DataTable().column(6).search($('#kt_datatable_search_query1 option:selected').html()).draw();
+    if($('#kt_datatable_search_query1 option:selected').html() == '-- Choose Category --'){
+        $('#products-table').DataTable().column(6).search('').draw();
+    }else{
+        $('#products-table').DataTable().column(6).search($('#kt_datatable_search_query1 option:selected').html()).draw();
+
+    }
 
 });
 $('#kt_datatable_search_query').keyup(function() {
