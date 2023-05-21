@@ -168,6 +168,9 @@ class UserController extends Controller {
 		$users = User::all();
 
 		return Datatables::of($users)
+			->addColumn('faculty_name', function ($users) {
+				return $users->faculty->name ?? '';
+			})
 			->addColumn('action', function ($users) {
 				return '<a onclick="editForm(' . $users->id . ')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
 				'<a onclick="deleteData(' . $users->id . ')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';

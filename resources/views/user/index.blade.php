@@ -26,6 +26,7 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Faculty Name</th>
                     <th>Role</th>
                     <th>Actions</th>
                 </tr>
@@ -82,6 +83,7 @@
                 {data: 'id', name: 'id'},
                 {data: 'name', name: 'name'},
                 {data: 'email', name: 'email'},
+                {data: 'faculty_name',width:'200px', name: 'faculty_name'},
                 {data: 'role', name: 'role'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ]

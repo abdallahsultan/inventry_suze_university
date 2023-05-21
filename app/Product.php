@@ -47,7 +47,8 @@ class Product extends Model
         
       
         if(auth()->user()->faculty->id){
-            return $this->ProductQuntities()->where('faculty_id',auth()->user()->faculty->id)->max('qty');
+            // return $this->ProductQuntities()->where('faculty_id',auth()->user()->faculty->id)->max('qty');
+            return $this->ProductQuntities()->where('faculty_id',auth()->user()->faculty->id)->where('type','in')->sum('qty') - $this->ProductQuntities()->where('type','out')->sum('qty');
         }else{
             return '---';
         }

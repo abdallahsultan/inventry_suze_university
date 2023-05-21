@@ -155,7 +155,7 @@ $notify_count=$notifcations->count();
         <header class="main-header mode">
 
             <!-- Logo -->
-            <a href="#" class="logo mode">
+            <a href="{{route('home')}}" class="logo mode">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini"></span>
                 <!-- logo for regular state and mobile devices -->
