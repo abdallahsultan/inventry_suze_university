@@ -109,6 +109,22 @@ class UserController extends Controller {
 			'message' => 'user Updated',
 		]);
 	}
+
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id) {
+		User::destroy($id);
+
+		return response()->json([
+			'success' => true,
+			'message' => 'User Delete',
+		]);
+	}
 	public function editprofile() {
 		$user=auth()->user();
 		if($user->role == 'admin'){
@@ -149,20 +165,7 @@ class UserController extends Controller {
 		return back()->with('message', 'Profile Updated');
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id) {
-		User::destroy($id);
-
-		return response()->json([
-			'success' => true,
-			'message' => 'User Delete',
-		]);
-	}
+	
 
 	public function apiUsers() {
 		$users = User::all();
@@ -203,4 +206,6 @@ class UserController extends Controller {
 	public function exportExcel() {
 		return (new ExportSuppliers)->download('suppliers.xlsx');
 	}
+
+	
 }

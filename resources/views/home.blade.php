@@ -144,7 +144,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         legend: {display: true}
     }
     });
-var xValues2 = ["Italy", "France", "Spain", "USA", "Argentina"];
+var xValues2 = ["chairs", "tables", "electronics", "Devices", "boards"];
     var yValues2 = [55, 49, 44, 24, 15];
     const setBg = () => {
   const randomColor = Math.floor(Math.random()*16777215).toString(16);

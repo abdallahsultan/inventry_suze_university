@@ -120,7 +120,7 @@ $notify_count=$notifcations->count();
         }
       .itemconfiguration
         {
-                height:435px;
+                /* height:435px; */
                 width:215px;
                 /* background-color:#CCC; */		
                 overflow-y:auto;

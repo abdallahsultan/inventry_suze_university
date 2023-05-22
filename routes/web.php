@@ -71,6 +71,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 	
 	Route::resource('user', 'UserController');
+	
+
 	Route::get('/apiUser', 'UserController@apiUsers')->name('api.users');
 	Route::get('/editprofile', 'UserController@editprofile')->name('edit.profile');
 	Route::post('/update_profile', 'UserController@update_profile')->name('update.profile');
