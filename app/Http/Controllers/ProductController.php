@@ -225,6 +225,13 @@ class ProductController extends Controller
             ->addColumn('category_name', function ($product){
                 return $product->category->name;
             })
+            ->addColumn('type', function ($product){
+                if($product->type == 'fixed')
+                return 'fixed';
+                else {
+                return 'consumed';
+                }
+            })
             ->addColumn('show_photo', function($product){
                 if ($product->image == NULL){
                     return 'No Image';
@@ -273,6 +280,13 @@ class ProductController extends Controller
         return Datatables::of($product)
             ->addColumn('category_name', function ($product){
                 return $product->category->name;
+            })
+            ->addColumn('type', function ($product){
+                if($product->type == 'fixed')
+                return 'fixed';
+                else {
+                return 'consumed';
+                }
             })
             ->addColumn('show_photo', function($product){
                 if ($product->image == NULL){
