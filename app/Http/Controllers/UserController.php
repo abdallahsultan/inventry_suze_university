@@ -97,14 +97,16 @@ class UserController extends Controller {
 			'password'   => 'sometimes|confirmed',
 		]);
 
-		$users = User::findOrFail($id);
+		$user = User::findOrFail($id);
 		$data=$request->all();
+		
 		if(!$request->password){
          $data=$request->except('password','password_confirmation');
 		}else{
 		$data['password']=bcrypt($request->password);	
 		}
-		$users->update($data);
+		dd($data);
+		$user->update($data);
 
 		return response()->json([
 			'success' => true,

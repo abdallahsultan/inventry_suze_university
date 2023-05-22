@@ -100,14 +100,15 @@
                     console.log(data);
                     $('#modal-form').modal('show');
                     $('.modal-title').text('Edit User');
-                    $('#faculty_id option:selected').prop('selected', false);
-                    $('#faculty_id option[value='+data.id+']').attr('selected','selected');
+                 
                     $('#id').val(data.id);
                     $('#name').val(data.name);
                     $('#email').val(data.email);
-                    $('#phone').val(data.email);
+                    $('#phone').val(data.phone);
                     $('#password').removeAttr('required');;
-                    $('#password-confirm').removeAttr('required');;
+                    $('#password-confirm').removeAttr('required');
+                    $('#faculty_id option:selected').prop('selected', false);
+                    $('#faculty_id option[value='+data.id+']').attr('selected','selected');
                   
                 },
                 error : function() {
