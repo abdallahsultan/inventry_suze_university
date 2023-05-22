@@ -105,7 +105,7 @@ class UserController extends Controller {
 		}else{
 		$data['password']=bcrypt($request->password);	
 		}
-		dd($data);
+		
 		$user->update($data);
 
 		return response()->json([
@@ -122,12 +122,22 @@ class UserController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy($id) {
-		User::destroy($id);
+		$user= User::find($id);
+		if($user->role == 'admin'){
 
-		return response()->json([
-			'success' => true,
-			'message' => 'User Delete',
-		]);
+			User::destroy($id);
+			return response()->json([
+				'success' => true,
+				'message' => 'User Delete',
+			]);
+		}else{
+			return response()->json([
+				'success' => false,
+				'message' => 'Admin can not delete',
+			]);
+		}
+
+		
 	}
 	public function editprofile() {
 		$user=auth()->user();
@@ -179,6 +189,9 @@ class UserController extends Controller {
 				return $users->faculty->name ?? '';
 			})
 			->addColumn('action', function ($users) {
+				if($users->role == 'admin'){
+					return '<a onclick="editForm(' . $users->id . ')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' ;
+				}
 				return '<a onclick="editForm(' . $users->id . ')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
 				'<a onclick="deleteData(' . $users->id . ')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
 			})
