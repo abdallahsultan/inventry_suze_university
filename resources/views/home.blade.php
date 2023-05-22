@@ -79,7 +79,7 @@
     </div>
 
 
-    <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+    <canvas id="myChart" style="width:100%;max-width:900px"></canvas>
 </div>
 <div class="box box-success">
 
@@ -143,8 +143,8 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     options: {
         
         legend: {
-          data:['ahmed','mhamed','sadfasf'],
-          display: true}
+          // data:['ahmed','mhamed','sadfasf'],
+          display: false}
     }
     });
 var xValues2 = ["chairs", "tables", "electronics", "Devices", "boards"];
