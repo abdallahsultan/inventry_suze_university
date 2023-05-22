@@ -7,7 +7,7 @@
 <!-- Small boxes (Stat box) -->
 <div class="row">
     <!-- Log on to codeastro.com for more projects! -->
-    <div class="col-md-3">
+    <div class="col-md-3" style="width:24% !important">
         <!-- small box -->
         <div class="small-box bg-aqua">
             <div class="inner">
@@ -22,7 +22,7 @@
         </div>
     </div>
     <!-- ./col -->
-    <div class="col-md-3">
+    <div class="col-md-3" style="width:24% !important">
         <!-- small box -->
         <div class="small-box bg-green">
             <div class="inner">
@@ -37,7 +37,7 @@
         </div>
     </div>
     <!-- ./col -->
-    <div class="col-md-3">
+    <div class="col-md-3" style="width:24% !important">
         <!-- small box -->
         <div class="small-box bg-yellow">
             <div class="inner">
@@ -51,7 +51,7 @@
         </div>
     </div>
     <!-- ./col -->
-    <div class="col-md-3">
+    <div class="col-md-3" style="width:24% !important">
        
         <div class="small-box bg-red">
             <div class="inner">
