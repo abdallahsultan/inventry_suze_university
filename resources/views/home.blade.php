@@ -7,7 +7,7 @@
 <!-- Small boxes (Stat box) -->
 <div class="row">
     <!-- Log on to codeastro.com for more projects! -->
-    <div class="col-lg-3 col-xs-6">
+    <div class="col-md-3">
         <!-- small box -->
         <div class="small-box bg-aqua">
             <div class="inner">
@@ -22,7 +22,7 @@
         </div>
     </div>
     <!-- ./col -->
-    <div class="col-lg-3 col-xs-6">
+    <div class="col-md-3">
         <!-- small box -->
         <div class="small-box bg-green">
             <div class="inner">
@@ -37,7 +37,7 @@
         </div>
     </div>
     <!-- ./col -->
-    <div class="col-lg-3 col-xs-6">
+    <div class="col-md-3">
         <!-- small box -->
         <div class="small-box bg-yellow">
             <div class="inner">
@@ -51,7 +51,7 @@
         </div>
     </div>
     <!-- ./col -->
-    <div class="col-lg-3 col-xs-6">
+    <div class="col-md-3">
        
         <div class="small-box bg-red">
             <div class="inner">
@@ -128,6 +128,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
         title:'sultan',
         borderColor: "#67A3D9",
+        borderText: "#67A3D9",
         fill: false
         },{
         data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
@@ -141,7 +142,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     },
     options: {
         
-        legend: {display: true}
+        legend: {
+          data:['ahmed','mhamed','sadfasf'],
+          display: true}
     }
     });
 var xValues2 = ["chairs", "tables", "electronics", "Devices", "boards"];
