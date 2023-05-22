@@ -134,12 +134,21 @@
                     data : {'_method' : 'DELETE', '_token' : csrf_token},
                     success : function(data) {
                         table.ajax.reload();
+                        if(data.success){
                         swal({
                             title: 'Success!',
                             text: data.message,
                             type: 'success',
-                            timer: '1500'
+                            timer: '2000'
                         })
+                        }else{
+                            swal({
+                                title: 'Oops...',
+                                text: data.message,
+                                type: 'error',
+                                
+                            })
+                        }
                     },
                     error : function () {
                         swal({

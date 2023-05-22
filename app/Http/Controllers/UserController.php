@@ -123,7 +123,8 @@ class UserController extends Controller {
 	 */
 	public function destroy($id) {
 		$user= User::find($id);
-		if($user->role == 'admin'){
+	
+		if($user->role == 'staff'){
 
 			User::destroy($id);
 			return response()->json([
