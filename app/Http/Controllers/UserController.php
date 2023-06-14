@@ -51,8 +51,9 @@ class UserController extends Controller {
 			'name' => 'required',
 			'email' => 'required|unique:users',
 		]);
-
-		User::create($request->all());
+		$data=$request->all();
+		$data['password']=bcrypt($request->password);	
+		User::create($data);
 
 		return response()->json([
 			'success' => true,
