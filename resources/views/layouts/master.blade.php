@@ -96,6 +96,12 @@ $notify_count=$notifcations->count();
             color: #065182;
             height: 58px;
         }
+        table{
+        overflow-x:scroll;
+        /* height:100px; */
+        width: 100% !important;
+        /* display:block; */
+        }
 
         /* Track */
         ::-webkit-scrollbar-track {
@@ -233,14 +239,15 @@ $notify_count=$notifcations->count();
                 </div>
                
                 <div class="col-md-4 " style=" border-left: 2px solid #0005;">
-                    <form action="#" method="get" class="sidebar-form">
+                    <form action="{{route('search')}}" method="post" class="sidebar-form">
+                        {{ csrf_field() }} {{ method_field('POST') }}
                         <div class="input-group">
                         <span class="input-group-btn">
-                                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i
+                                <button type="submit"  class="btn btn-flat"><i
                                 class="fa fa-search"></i>
                                 </button>
                             </span>
-                            <input type="text" name="q" dir="ltr" class="form-control" placeholder="Search...">
+                            <input type="text" name="search" dir="ltr" class="form-control" placeholder="Search Page Name">
                             
                         </div>
                     </form>

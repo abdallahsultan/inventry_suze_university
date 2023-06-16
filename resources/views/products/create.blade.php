@@ -31,6 +31,7 @@
     </div>
 
     @include('products.unitform')
+    @include('products.categoryform')
 
 @endsection
 

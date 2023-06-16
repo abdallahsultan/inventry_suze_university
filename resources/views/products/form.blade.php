@@ -43,10 +43,10 @@
                                 </div>
                                 <div class="col-md-4">
                                     
-                                    {!! Form::select('category_id', $categories, null, ['class' => 'form-control select', 'placeholder' => '-- Choose Category --', 'id' => 'category_id']) !!}
+                                    {!! Form::select('category_id',[], null, ['class' => 'form-control select', 'placeholder' => '-- Choose Category --', 'id' => 'category_id']) !!}
                                     <span class="help-block with-errors"></span>
                                 </div>
-                                <a href="#"><i class="fa fa-plus-square" aria-hidden="true"></i></a>
+                                <a href="#" onclick="addcategoryForm()"><i class="fa fa-plus-square" aria-hidden="true"></i></a>
                             
                             </div>
                             <div class="form-group">
@@ -158,6 +158,7 @@
     //     }
     $(document).ready(function() {
         getunit();
+        getcategories();
     });
 
     
@@ -174,7 +175,7 @@ function getunit(){
           if (result) {
            
               var html_units = '';
-              var html_units = '<option >-- Choose Unit --</option>';
+              var html_units = '<option value="" >-- Choose Unit --</option>';
               $.each(result.units, function(key, value) {
                 
               html_units += '<option   value="' + result.units[key].id + '" >' + result.units[key].name + '  </option>';
@@ -241,6 +242,7 @@ function getunit(){
             processData: false,
             success : function(data) {
                 $('#unit-modal-form').modal('hide');
+                getunit();
                 swal({
                     title: 'Success!',
                     text: data.message,
@@ -250,7 +252,110 @@ function getunit(){
             },
             error : function(data){
                 swal({
-                    title: 'dsasadOops...',
+                    title: 'Oops...',
+                    text: data.message,
+                    type: 'error',
+                    timer: '1500'
+                })
+            }
+        });
+        return false;
+    
+          
+        }
+
+    
+function getcategories(){
+  
+  let url="{{ route('categories.index') }}";
+  $.ajax({
+      type: "GET",
+      dataType: 'json',
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+      url: url,
+      success: function(result) {
+          console.log(result.categories);
+          if (result) {
+           
+              var html_categories = '';
+              var html_categories = '<option value="" >-- Choose Category --</option>';
+              $.each(result.categories, function(key, value) {
+                
+              html_categories += '<option   value="' + result.categories[key].id + '" >' + result.categories[key].name + '  </option>';
+                  
+              });
+             
+              
+
+              $('#category_id').html(html_categories);
+             
+          
+          }
+      },
+      error: function(error, jqXHR, exception) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: exception,
+              // footer: '<a href="">Why do I have this issue?</a>'
+          })
+      }
+  });
+}
+    function addcategoryForm() {
+            save_method = "add";
+            $('input[name=_method]').val('POST');
+            $('#category-modal-form').modal('show');
+            $('#category-modal-form form')[0].reset();
+            $('.category-modal-title').text('Add category');
+        }
+
+    $('input[name=add_type]').on('change', function() {
+    
+        if($("input[type='radio']:checked").val() == 'add'){
+            $(".select_type").hide();
+        $(".add_new_type").show();
+        $(".add_new_type input").attr('required',true);
+        $(".select_type input").attr('required',false);
+        $("#product_id").attr('required',false);
+       
+        }else{
+
+           
+            $("#product_id").attr('required',true);
+            $(".select_type input").attr('required',true);
+            $(".add_new_type input").attr('required',false);
+            $(".add_new_type").hide();
+            $(".select_type").show();
+        }
+       
+    });
+    
+    function submitcategoryform(){
+                  
+        var id = $('#id').val();
+        // if (save_method == 'add') url = "{{ url('units') }}";
+        // else url = "{{ url('units') . '/' }}" + id;
+        url = "{{ url('categories') }}";
+        $.ajax({ 
+            url : url,
+            type : "POST",
+            data: new FormData($("#category-modal-form form")[0]),
+            contentType: false,
+            processData: false,
+            success : function(data) {
+                $('#category-modal-form').modal('hide');
+                getcategories();
+                swal({
+                    title: 'Success!',
+                    text: data.message,
+                    type: 'success',
+                    timer: '1500'
+                })
+            },
+            error : function(data){
+                swal({
+                    title: 'Oops...',
                     text: data.message,
                     type: 'error',
                     timer: '1500'

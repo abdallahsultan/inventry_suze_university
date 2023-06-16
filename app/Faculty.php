@@ -18,5 +18,11 @@ class Faculty extends Model
     //     return $this->hasMany(Notification::class,'faculty_id');
         
     // }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_quntities');
+      
+    }
     
 }

@@ -19,9 +19,15 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $categories = Category::all();
+        if($request->ajax()){
+            return response()->json([
+                
+                'categories'    => $categories
+             ]);
+        }
         return view('categories.index');
     }
 

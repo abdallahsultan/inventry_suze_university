@@ -30,7 +30,8 @@
         <!-- /.box-body -->
     </div>
 
-    
+    @include('products.unitform')
+    @include('products.categoryform')
 
 @endsection
 
@@ -179,6 +180,175 @@
                 }
             });
         });
+
+                           // =====================================================================
+
+                           $(document).ready(function() {
+        getunit();
+        getcategories();
+    });
+
+    
+function getunit(){
+  
+  let url="{{ route('units.index') }}";
+  $.ajax({
+      type: "GET",
+      dataType: 'json',
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+      url: url,
+      success: function(result) {
+          console.log(result.units);
+          if (result) {
+           
+              var html_units = '';
+              var html_units = '<option  value="">-- Choose Unit --</option>';
+              $.each(result.units, function(key, value) {
+                
+              html_units += '<option   value="' + result.units[key].id + '" >' + result.units[key].name + '  </option>';
+                  
+              });
+             
+              
+
+              $('#unit_id').html(html_units);
+             
+          
+          }
+      },
+      error: function(error, jqXHR, exception) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: exception,
+              // footer: '<a href="">Why do I have this issue?</a>'
+          })
+      }
+  });
+}
+    function addunitForm() {
+            save_method = "add";
+            $('#unit-modal-form input[name=_method]').val('POST');
+            $('#unit-modal-form').modal('show');
+            $('#unit-modal-form form')[0].reset();
+            $('.unit-modal-title').text('Add units');
+        }
+
+    
+    function submitunitform(){
+                  
+        url = "{{ url('units') }}";
+        $.ajax({ 
+            url : url,
+            type : "POST",
+            data: new FormData($("#unit-modal-form form")[0]),
+            contentType: false,
+            processData: false,
+            success : function(data) {
+                $('#unit-modal-form').modal('hide');
+                getunit();
+                swal({
+                    title: 'Success!',
+                    text: data.message,
+                    type: 'success',
+                    timer: '1500'
+                })
+            },
+            error : function(data){
+                swal({
+                    title: 'Oops...',
+                    text: data.message,
+                    type: 'error',
+                    timer: '1500'
+                })
+            }
+        });
+        return false;
+    
+          
+        }
+
+    
+function getcategories(){
+  
+  let url="{{ route('categories.index') }}";
+  $.ajax({
+      type: "GET",
+      dataType: 'json',
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+      url: url,
+      success: function(result) {
+          console.log(result.categories);
+          if (result) {
+           
+              var html_categories = '';
+              var html_categories = '<option value="" >-- Choose Category --</option>';
+              $.each(result.categories, function(key, value) {
+                
+              html_categories += '<option   value="' + result.categories[key].id + '" >' + result.categories[key].name + '  </option>';
+                  
+              });
+             
+              
+
+              $('#category_id').html(html_categories);
+             
+          
+          }
+      },
+      error: function(error, jqXHR, exception) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: exception,
+              // footer: '<a href="">Why do I have this issue?</a>'
+          })
+      }
+  });
+}
+    function addcategoryForm() {
+            save_method = "add";
+            $('#category-modal-form input[name=_method]').val('POST');
+            $('#category-modal-form').modal('show');
+            $('#category-modal-form form')[0].reset();
+            $('.category-modal-title').text('Add category');
+        }
+
+
+    
+    function submitcategoryform(){
+                  
+ 
+        url = "{{ url('categories') }}";
+        $.ajax({ 
+            url : url,
+            type : "POST",
+            data: new FormData($("#category-modal-form form")[0]),
+            contentType: false,
+            processData: false,
+            success : function(data) {
+                $('#category-modal-form').modal('hide');
+                getcategories();
+                swal({
+                    title: 'Success!',
+                    text: data.message,
+                    type: 'success',
+                    timer: '1500'
+                })
+            },
+            error : function(data){
+                swal({
+                    title: 'Oops...',
+                    text: data.message,
+                    type: 'error',
+                    timer: '1500'
+                })
+            }
+        });
+        return false;
+    
+          
+        }
     </script>
 
 @endsection

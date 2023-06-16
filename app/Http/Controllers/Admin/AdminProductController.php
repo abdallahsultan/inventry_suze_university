@@ -29,12 +29,14 @@ class AdminProductController extends Controller
         $categories = Category::orderBy('name','ASC')
             ->get()
             ->pluck('name','id');
+      
+        $units = Unit::orderBy('name','ASC')->get()->pluck('name','id');
 
         // $products = Product::with(['ProductQuntities'])->get();
         // $product = Product::where('facility_id',auth()->user()->facility->id)->get();
        
        
-        return view('Admin.products.index', compact('categories'))->with('message', 'Product Created Successfully');
+        return view('Admin.products.index', compact('units','categories'));
     }
 
     /**
@@ -118,11 +120,11 @@ class AdminProductController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::orderBy('name','ASC')
-        ->get()
-        ->pluck('name','id');
-        $producs = Product::all();
-        return view('Admin.products.edit', compact('category'));
+       
+        
+        $product = Product::find($id);
+        return $product;
+       
     }
 
     /**
@@ -134,13 +136,10 @@ class AdminProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = Category::orderBy('name','ASC')
-            ->get()
-            ->pluck('name','id');
-
-
+    
+        
         $input = $request->all();
-        dd($input);
+       
         $product = Product::findOrFail($id);
 
         $input['image'] = $product->image;
@@ -154,7 +153,7 @@ class AdminProductController extends Controller
         }
 
         $product->update($input);
-
+     
         return response()->json([
             'success' => true,
             'message' => 'Products Update'
@@ -169,6 +168,7 @@ class AdminProductController extends Controller
      */
     public function destroy($id)
     {
+        
         $product = Product::findOrFail($id);
 
         if (!$product->image == NULL){
@@ -176,7 +176,7 @@ class AdminProductController extends Controller
         }
 
         Product::destroy($id);
-
+        $product->ProductQuntities()->delete();
         return response()->json([
             'success' => true,
             'message' => 'Products Deleted'
@@ -190,6 +190,9 @@ class AdminProductController extends Controller
         return Datatables::of($product)
             ->addColumn('category_name', function ($product){
                 return $product->category->name;
+            })
+            ->addColumn('unit_name', function ($product){
+                return $product->unit->name;
             })
             ->addColumn('type', function ($product){
                 if($product->type == 'fixed')
@@ -220,7 +223,7 @@ class AdminProductController extends Controller
                     '<a href="'.$link.'" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-th"></i> </a> '.
                     '<a onclick="deleteData('. $product->id .')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> </a> ';
             })
-            ->rawColumns(['category_name','show_photo','action','monitor_inventory_auto'])->make(true);
+            ->rawColumns(['unit_name'.'category_name','show_photo','action','monitor_inventory_auto'])->make(true);
 
     }
     public function details(Request $request,$product_id)

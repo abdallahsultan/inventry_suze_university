@@ -115,7 +115,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 
 <script>
   
-    const xValues = ['Jan','Feb','Mar','Apr','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const xValues = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
     // var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
     const yValues = [55, 49, 44, 24, 15];
    
@@ -126,7 +126,6 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
         labels: xValues,
         datasets: [{
         data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
-        title:'sultan',
         borderColor: "#67A3D9",
         borderText: "#67A3D9",
         fill: false
@@ -180,8 +179,8 @@ var xValues2 = ["chairs", "tables", "electronics", "Devices", "boards"];
         }
       }
     });
-var xValues3 = ["Online", "Offline"];
-    var yValues3 = [55, 49];
+var xValues3 = ["Online {{$user_online}}", "Offline {{$user_offline}}"];
+    var yValues3 = ["{{$user_online}}", "{{$user_offline}}"];
   
     var barColors3 = [
       "#1e7145",
@@ -201,7 +200,7 @@ var xValues3 = ["Online", "Offline"];
       options: {
         title: {
           display: true,
-          text: "Users Is Online \ Offline"
+          text: "Users Is Online / Offline All ( {{$user_count}} )"
         }
       }
     });

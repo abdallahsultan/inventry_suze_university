@@ -61,11 +61,14 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>type.</th>
-                    <th>Qty</th>
-                    <th>Monitor inventory auto</th>
-                    <th>Minimum Qty</th>
+                    <th>Total Qty</th>
+                    {{-- <th>Monitor inventory auto</th>
+                    <th>Minimum Qty</th> --}}
+                    <th>Unit</th>
                     <th>Category</th>
-                    {{-- <th>Faculty</th> --}}
+                    <th>Barcode</th>
+                    <th>Desciption</th>
+                  
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -75,6 +78,9 @@
         <!-- /.box-body -->
     </div>
 
+    @include('Admin.products.form_edit')
+    @include('products.unitform')
+    @include('products.categoryform')
 
 @endsection
 
@@ -111,10 +117,13 @@
                 {data: 'name', name: 'name'},
                 {data: 'type', name: 'type'},
                 {data: 'all_qty', name: 'all_qty'},
-                {data: 'monitor_inventory_auto', name: 'monitor_inventory_auto'},
-                {data: 'minimum_qty', name: 'minimum_qty'},
+                // {data: 'monitor_inventory_auto', name: 'monitor_inventory_auto'},
+                // {data: 'minimum_qty', name: 'minimum_qty'},
                 // {data: 'show_photo', name: 'show_photo'},
+                {data: 'unit_name', name: 'unit_name'},
                 {data: 'category_name', name: 'category_name'},
+                {data: 'barcode', name: 'barcode'},
+                {data: 'description', name: 'description'},
                 {data: 'action', name: 'action',orderable: false, searchable: false}
             ]
         });
@@ -143,29 +152,32 @@ $('#kt_datatable_search_query0').keyup(function() {
 
         function addForm() {
             save_method = "add";
-            $('input[name=_method]').val('POST');
-            $('#modal-form').modal('show');
-            $('#modal-form form')[0].reset();
-            $('.modal-title').text('Add Products');
+            $('#product-update-form-item input[name=_method]').val('POST');
+            $('#product-update-modal-form').modal('show');
+            $('#product-update-modal-form form')[0].reset();
+            $('.product-update-modal-title').text('Add Products');
         }
 
         function editForm(id) {
             save_method = 'edit';
-            $('input[name=_method]').val('PATCH');
-            $('#modal-form form')[0].reset();
+            $('#product-update-form-item input[name=_method]').val('PATCH');
+            $('#product-update-modal-form form')[0].reset();
             $.ajax({
                 url: "{{ url('faculties_products') }}" + '/' + id + "/edit",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
-                    $('#modal-form').modal('show');
-                    $('.modal-title').text('Edit Products');
+                    $('#product-update-modal-form').modal('show');
+                    $('.product-update-modal-title').text('Edit Product');
 
                     $('#id').val(data.id);
                     $('#name').val(data.name);
-                    $('#harga').val(data.harga);
-                    $('#qty').val(data.qty);
+                    $('#barcode').val(data.barcode);
+                    $('#description').html(data.description);
+                    $('#type').val(data.type);
+                  
                     $('#category_id').val(data.category_id);
+                    $('#unit_id').val(data.unit_id);
                 },
                 error : function() {
                     alert("Nothing Data");
@@ -185,7 +197,7 @@ $('#kt_datatable_search_query0').keyup(function() {
                 confirmButtonText: 'Yes, delete it!'
             }).then(function () {
                 $.ajax({
-                    url : "{{ url('products') }}" + '/' + id,
+                    url : "{{ url('faculties_products') }}" + '/' + id,
                     type : "POST",
                     data : {'_method' : 'DELETE', '_token' : csrf_token},
                     success : function(data) {
@@ -210,22 +222,21 @@ $('#kt_datatable_search_query0').keyup(function() {
         }
 
         $(function(){
-            $('#modal-form form').validator().on('submit', function (e) {
+            $('#product-update-modal-form form').validator().on('submit', function (e) {
                 if (!e.isDefaultPrevented()){
                     var id = $('#id').val();
-                    if (save_method == 'add') url = "{{ url('faculties_products') }}";
-                    else url = "{{ url('faculties_products') . '/' }}" + id;
+                   url = "{{ url('faculties_products') . '/' }}" + id;
 
                     $.ajax({
                         url : url,
                         type : "POST",
                         //hanya untuk input data tanpa dokumen
-//                      data : $('#modal-form form').serialize(),
-                        data: new FormData($("#modal-form form")[0]),
+//                      data : $('#product-update-modal-form form').serialize(),
+                        data: new FormData($("#product-update-modal-form form")[0]),
                         contentType: false,
                         processData: false,
                         success : function(data) {
-                            $('#modal-form').modal('hide');
+                            $('#product-update-modal-form').modal('hide');
                             table.ajax.reload();
                             swal({
                                 title: 'Success!',
@@ -247,6 +258,177 @@ $('#kt_datatable_search_query0').keyup(function() {
                 }
             });
         });
+
+
+
+        // =====================================================================
+
+        $(document).ready(function() {
+        getunit();
+        getcategories();
+    });
+
+    
+function getunit(){
+  
+  let url="{{ route('units.index') }}";
+  $.ajax({
+      type: "GET",
+      dataType: 'json',
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+      url: url,
+      success: function(result) {
+          console.log(result.units);
+          if (result) {
+           
+              var html_units = '';
+              var html_units = '<option  value="">-- Choose Unit --</option>';
+              $.each(result.units, function(key, value) {
+                
+              html_units += '<option   value="' + result.units[key].id + '" >' + result.units[key].name + '  </option>';
+                  
+              });
+             
+              
+
+              $('#unit_id').html(html_units);
+             
+          
+          }
+      },
+      error: function(error, jqXHR, exception) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: exception,
+              // footer: '<a href="">Why do I have this issue?</a>'
+          })
+      }
+  });
+}
+    function addunitForm() {
+            save_method = "add";
+            $('#unit-modal-form input[name=_method]').val('POST');
+            $('#unit-modal-form').modal('show');
+            $('#unit-modal-form form')[0].reset();
+            $('.unit-modal-title').text('Add units');
+        }
+
+    
+    function submitunitform(){
+                  
+        url = "{{ url('units') }}";
+        $.ajax({ 
+            url : url,
+            type : "POST",
+            data: new FormData($("#unit-modal-form form")[0]),
+            contentType: false,
+            processData: false,
+            success : function(data) {
+                $('#unit-modal-form').modal('hide');
+                getunit();
+                swal({
+                    title: 'Success!',
+                    text: data.message,
+                    type: 'success',
+                    timer: '1500'
+                })
+            },
+            error : function(data){
+                swal({
+                    title: 'Oops...',
+                    text: data.message,
+                    type: 'error',
+                    timer: '1500'
+                })
+            }
+        });
+        return false;
+    
+          
+        }
+
+    
+function getcategories(){
+  
+  let url="{{ route('categories.index') }}";
+  $.ajax({
+      type: "GET",
+      dataType: 'json',
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+      url: url,
+      success: function(result) {
+          console.log(result.categories);
+          if (result) {
+           
+              var html_categories = '';
+              var html_categories = '<option value="" >-- Choose Category --</option>';
+              $.each(result.categories, function(key, value) {
+                
+              html_categories += '<option   value="' + result.categories[key].id + '" >' + result.categories[key].name + '  </option>';
+                  
+              });
+             
+              
+
+              $('#category_id').html(html_categories);
+             
+          
+          }
+      },
+      error: function(error, jqXHR, exception) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: exception,
+              // footer: '<a href="">Why do I have this issue?</a>'
+          })
+      }
+  });
+}
+    function addcategoryForm() {
+            save_method = "add";
+            $('#category-modal-form input[name=_method]').val('POST');
+            $('#category-modal-form').modal('show');
+            $('#category-modal-form form')[0].reset();
+            $('.category-modal-title').text('Add category');
+        }
+
+
+    
+    function submitcategoryform(){
+                  
+ 
+        url = "{{ url('categories') }}";
+        $.ajax({ 
+            url : url,
+            type : "POST",
+            data: new FormData($("#category-modal-form form")[0]),
+            contentType: false,
+            processData: false,
+            success : function(data) {
+                $('#category-modal-form').modal('hide');
+                getcategories();
+                swal({
+                    title: 'Success!',
+                    text: data.message,
+                    type: 'success',
+                    timer: '1500'
+                })
+            },
+            error : function(data){
+                swal({
+                    title: 'Oops...',
+                    text: data.message,
+                    type: 'error',
+                    timer: '1500'
+                })
+            }
+        });
+        return false;
+    
+          
+        }
     </script>
 
 @endsection

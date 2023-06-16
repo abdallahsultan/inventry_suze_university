@@ -20,6 +20,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::post('/search', 'HomeController@search')->name('search');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('dashboard', function () {

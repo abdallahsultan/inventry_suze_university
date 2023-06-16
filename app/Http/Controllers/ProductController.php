@@ -132,6 +132,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+       
         $categories = Category::orderBy('name','ASC')->get()->pluck('name','id');
         $faculties  = Faculty::orderBy('name','ASC')->get()->pluck('name','id');
         $units = Unit::orderBy('name','ASC')->get()->pluck('name','id');
