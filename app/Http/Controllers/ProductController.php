@@ -66,7 +66,7 @@ class ProductController extends Controller
             ->pluck('name','id');
         
       
-        if($request->minimum_qty > $request->qty){
+        if($request->minimum_qty >= $request->qty && $request->minimum_qty != 0 && $request->qty != 0){
             return redirect()->back()->with('error', 'The quantity should not be less than the minimum');
         }
        
