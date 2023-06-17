@@ -131,9 +131,9 @@
               
 $('#kt_datatable_search_query1').change(function() {
     if($('#kt_datatable_search_query1 option:selected').html() == '-- Choose Category --'){
-        $('#products-table').DataTable().column(6).search('').draw();
+        $('#products-table').DataTable().column(5).search('').draw();
     }else{
-        $('#products-table').DataTable().column(6).search($('#kt_datatable_search_query1 option:selected').html()).draw();
+        $('#products-table').DataTable().column(5).search($('#kt_datatable_search_query1 option:selected').html()).draw();
 
     }
 
