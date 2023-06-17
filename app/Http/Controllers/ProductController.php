@@ -65,14 +65,8 @@ class ProductController extends Controller
             ->get()
             ->pluck('name','id');
         
-        // $this->validate($request , [
-        //     'nama'          => 'required|string',
-        //     'harga'         => 'required',
-        //     'qty'           => 'required',
-        //     'image'         => 'required',
-        //     'category_id'   => 'required',
-        // ]);
-        if($request->minimum_qty >= $request->qty){
+      
+        if($request->minimum_qty > $request->qty){
             return redirect()->back()->with('error', 'The quantity should not be less than the minimum');
         }
        
@@ -98,7 +92,7 @@ class ProductController extends Controller
         'product_id'=>$product->id,
         'faculty_id'=>$request->faculty_id,
         'qty'=>$request->qty,
-        'monitor_inventory_auto'=>isset($request->monitor_inventory_auto) ? $request->monitor_inventory_auto:0,
+        'monitor_inventory_auto'=>isset($request->monitor_inventory_auto) ? $request->monitor_inventory_auto :0,
         'minimum_qty'=>$request->minimum_qty,
         'type'=>'in',
         'main'=>1,
