@@ -66,9 +66,12 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/exportRequestsAll', 'RequestController@exportRequestsAll')->name('exportPDF.requestsAll');
 	Route::get('/exportRequestsAllExcel', 'RequestController@exportExcel')->name('exportExcel.requestsAll');
 
-	Route::post('/requests/reciver/cancel', 'RequestController@cancel_request_reciver')->name('requests.cancel_reciver');
-	Route::post('/requests/reciver/confirm', 'RequestController@confirm_request_reciver')->name('requests.confirm_reciver');
 	Route::post('/requests/senter/cancel', 'RequestController@cancel_request_senter')->name('requests.cancel_senter');
+	Route::post('/requests/senter/confirm', 'RequestController@confirm_request_senter')->name('requests.confirm_senter');
+	
+
+	Route::post('/requests/reciver/rejected', 'RequestController@rejected_request_reciver')->name('requests.rejected_reciver');
+	Route::post('/requests/reciver/confirm', 'RequestController@confirm_request_reciver')->name('requests.confirm_reciver');
 
 	
 	Route::resource('user', 'UserController');

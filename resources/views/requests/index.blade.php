@@ -54,19 +54,6 @@
      <!-- Validator  -->
     <script src="{{ asset('assets/validator/validator.min.js') }}"></script>
 
-    <!-- <script>
-    $(function () {
-    $('#items-table').DataTable()
-    $('#example2').DataTable({
-    'paging'      : true,
-    'lengthChange': false,
-    'searching'   : false,
-    'ordering'    : true,
-    'info'        : true,
-    'autoWidth'   : false
-    })
-    })
-    </script> -->
 
     <script type="text/javascript">
         var table = $('#requests-table').DataTable({
@@ -114,6 +101,7 @@
             });
         }
 
+      
         function deleteData(id){
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
             swal({
@@ -188,7 +176,91 @@
                 }
             });
         });
+        function addFormrecieved(id){
+           
+            var csrf_token = $('meta[name="csrf-token"]').attr('content');
+            swal({
+                title: 'Are you sure?',
+                text: "the required quantity has already arrived?",
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, Recieved it!'
+            }).then(function () {
+                $.ajax({
+                    url : "{{ url('/requests/senter/confirm') }}",
+                    type : "POST",
+                    data : {'_method' : 'POST', '_token' : csrf_token,'id': id},
+                    success : function(data) {
+                        table.ajax.reload();
 
+                        if(data.success){
+
+                        
+                        swal({
+                            title: 'Success!',
+                            text: data.message,
+                            type: 'success',
+                            timer: '1500'
+                        })
+                    }else{
+                        swal({
+                            title: 'Oops...',
+                            text: data.message,
+                            type: 'error',
+                            timer: '1500'
+                        })
+                    }
+                    },
+                    error : function () {
+                        swal({
+                            title: 'Oops...',
+                            text: data.message,
+                            type: 'error',
+                            timer: '1500'
+                        })
+                    }
+                });
+            });
+        }
+
+        function cancelData(id){
+            
+            var csrf_token = $('meta[name="csrf-token"]').attr('content');
+            swal({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, Canceld it!'
+            }).then(function () {
+                $.ajax({
+                    url : "{{ url('/requests/senter/cancel') }}",
+                    type : "POST",
+                    data : {'_method' : 'POST', '_token' : csrf_token,'id': id},
+                    success : function(data) {
+                        table.ajax.reload();
+                        swal({
+                            title: 'Success!',
+                            text: data.message,
+                            type: 'success',
+                            timer: '1500'
+                        })
+                    },
+                    error : function () {
+                        swal({
+                            title: 'Oops...',
+                            text: data.message,
+                            type: 'error',
+                            timer: '1500'
+                        })
+                    }
+                });
+            });
+        }
 
         
     </script>

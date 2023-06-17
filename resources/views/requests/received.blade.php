@@ -212,7 +212,7 @@
             $('#modal-form-cancel form').validator().on('submit', function (e) {
                 if (!e.isDefaultPrevented()){
                     var id = $('#id').val();
-                   url = "{{ url('requests') . '/reciver/cancel' }}" ;
+                   url = "{{ url('requests') . '/reciver/rejected' }}" ;
 
                     $.ajax({
                         url : url,
@@ -246,7 +246,7 @@
             });
         });
 
-
+       
         
     </script>
 

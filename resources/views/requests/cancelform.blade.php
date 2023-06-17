@@ -33,7 +33,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Cancel</button>
+                    <button type="submit" class="btn btn-success">Confirm Rejected</button>
                 </div>
 
             </form>
