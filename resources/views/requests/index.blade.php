@@ -67,7 +67,7 @@
                 {data: 'receiver_stock', name: 'receiver_stock'},
                 {data: 'details', name: 'details'},
                 {data: 'senter_status', name: 'senter_status'},
-                {data: 'other_reason', name: 'other_reason'},
+                {data: 'reason', name: 'reason'},
                 {data: 'action', name: 'action',width:"150px", orderable: false, searchable: false}
             ]
         });

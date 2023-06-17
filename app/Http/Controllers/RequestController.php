@@ -145,9 +145,9 @@ class RequestController extends Controller
         
         $user=auth()->user();
         $faculty_id=$user->faculty->id;
-        $requests = RequestModel::where('receiver_stock',$faculty_id)->orderBy('id', 'desc')->get();
+        $requests = RequestModel::where('receiver_stock',$faculty_id);
   
-        return Datatables::of($requests)
+        return Datatables::of($requests->orderBy('id', 'DESC'))
             // ->addColumn('status', function($requests){
                
             //     return $requests->;
@@ -181,7 +181,7 @@ class RequestController extends Controller
     {
         $user=auth()->user();
         $faculty_id=$user->faculty->id;
-        $requests = RequestModel::where('senter_stock',$faculty_id)->orderBy('id', 'desc')->get();
+        $requests = RequestModel::where('senter_stock',$faculty_id)->orderBy('id', 'DESC');
   
         return Datatables::of($requests)
             // ->addColumn('status', function($requests){
