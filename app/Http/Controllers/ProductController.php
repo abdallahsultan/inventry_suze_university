@@ -243,8 +243,8 @@ class ProductController extends Controller
             })
             ->addColumn('action', function($product){
                 $edit_link=route('products.edit',$product->id);
-                return'<a href="'.$edit_link.'" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
-                    '<a onclick="deleteData('. $product->id .')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
+                return'<a href="'.$edit_link.'" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' ;
+                    // '<a onclick="deleteData('. $product->id .')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>'
             })
             ->rawColumns(['category_name','show_photo','my_monitor_inventory_auto','action'])->make(true);
 
