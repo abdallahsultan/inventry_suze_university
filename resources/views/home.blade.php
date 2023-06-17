@@ -114,52 +114,62 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
 </script>
 
 <script>
-  
-    const xValues = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-    // var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-    const yValues = [55, 49, 44, 24, 15];
-   
-    new Chart("myChart", {
-    type: "line",
-    
-    data: {
-        labels: xValues,
-        datasets: [{
-        data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
-        borderColor: "#67A3D9",
-        borderText: "#67A3D9",
-        fill: false
-        },{
-        data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
-        borderColor: "#EF9BB7",
-        fill: false
-        },{
-        data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
-        borderColor: "#065182",
-        fill: false
-        }]
-    },
-    options: {
-        
-        legend: {
-          // data:['ahmed','mhamed','sadfasf'],
-          display: false}
-    }
-    });
-var xValues2 = ["chairs", "tables", "electronics", "Devices", "boards"];
-    var yValues2 = [55, 49, 44, 24, 15];
     const setBg = () => {
   const randomColor = Math.floor(Math.random()*16777215).toString(16);
   const color="#"+randomColor;
   return color
 }
 
-   var color= setBg();
+   
+    // const xValues = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+    var monthes ="{{$monthes}}";
+    var chart_yValues ="{{$chart_yValues}}";
+    monthes = JSON.parse(monthes.replace(/&quot;/g,'"'));
+   
+    const xValues=monthes;
+    const datasets = [];
+    // var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+    $.each(JSON.parse(chart_yValues.replace(/&quot;/g,'"')), function( index, value ) {
+      var color= setBg();
+    
+      var data= {
+        label:index,
+        data: Object.values(value),
+        borderColor: color,
+        borderText: color,
+        fill: false
+      }
+      datasets.push(data);
+
+    });
+   
+    new Chart("myChart", {
+    type: "line",
+    
+    data: {
+        labels: xValues,
+        datasets:datasets
+    },
+    options: {
+        legend: {
+          display: true
+        }
+    }
+    });
+
+    var dt_xValues2 ="{{$chart2_yValues2}}";
+    dt_xValues2 = JSON.parse(dt_xValues2.replace(/&quot;/g,'"'));
+    xValues2 = Object.keys(dt_xValues2);
+   
+    var yValues2 =  Object.values(dt_xValues2);
+  
     var barColors2 = [
       "#b91d47",
       "#091A52",
       "#67A3D9",
       "#F8B7CD",
+      "#F8B7eD",
+      "#F8B7qD",
       "#1e7145"
     ];
     
