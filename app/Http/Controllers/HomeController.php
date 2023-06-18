@@ -111,7 +111,7 @@ class HomeController extends Controller
     
         $category_count  = count(array_unique($productQuntites->pluck('category_id')->toArray())); 
         $product_count   = count(array_unique($productQuntites->pluck('product_id')->toArray())); 
-        $faculty_count = Faculty::count();
+        $faculty_count   = Faculty::count();
         $user_count      = 0;
        }
       

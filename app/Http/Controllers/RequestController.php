@@ -163,7 +163,7 @@ class RequestController extends Controller
              })
             ->addColumn('senter_stock', function($requests){
                
-                return $requests->senterstock->name;
+                return $requests->senterstock->name ?? 'Deleted Faculty';
             })
             ->addColumn('action', function($requests){
                if($requests->senter_status =='pending' && $requests->receiver_status !='canceled'){
@@ -182,15 +182,16 @@ class RequestController extends Controller
         $user=auth()->user();
         $faculty_id=$user->faculty->id;
         $requests = RequestModel::where('senter_stock',$faculty_id)->orderBy('id', 'DESC');
-  
+       
         return Datatables::of($requests)
             // ->addColumn('status', function($requests){
                
             //     return $requests->;
             // })
+           
             ->addColumn('receiver_stock', function($requests){
                
-                return $requests->receiverstock->name;
+                return $requests->receiverstock->name ?? 'Deleted Faculty';
             })
             ->addColumn('action', function($requests){
                 if($requests->receiver_status =='not_received' && $requests->senter_status =='done'){
