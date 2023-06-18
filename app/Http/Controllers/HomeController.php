@@ -78,6 +78,7 @@ class HomeController extends Controller
        $chart2_yValues2=[];
       
        foreach ($categories as  $category) {
+        if(in_array($category->id,array_unique($productQuntites->pluck('category_id')->toArray()))){
         $sum_items_qty=0;
         $products_ids=$category->products->pluck('id')->toArray();
         foreach ($monthes as  $month) {
@@ -101,6 +102,7 @@ class HomeController extends Controller
              }
             }
          $chart2_yValues2[$category->name]= $sum_items_qty;
+        }
        }
        if(auth()->user()->role == 'admin'){
         $category_count = Category::count();
