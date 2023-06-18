@@ -1,10 +1,10 @@
 <aside class="main-sidebar mode-sidebar">
     <br>
-    <br>
-    <br>
+ 
 
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar left_contentlist">
+    {{-- <section class="sidebar left_contentlist"> --}}
+        <section class="sidebar">
  
         <!-- Sidebar user panel (optional) -->
       
@@ -22,7 +22,8 @@
         <!-- /.search form -->
 
         <!-- Sidebar Menu -->
-        <div class="itemconfiguration ">
+        {{-- <div class="itemconfiguration "> --}}
+        <div class=" ">
             <ul class="sidebar-menu "  data-widget="tree">
                 <!-- <li class="header">Functions</li> -->
                 <!-- Optionally, you can add icons to the links -->
@@ -50,17 +51,16 @@
         
         </div>
        
-       <div class="logout text-center ">
+       <div class="logout  sidebar-menu "   data-widget="tree">
         <hr>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+         <form id="logout-form" action="{{ route('logout') }}" method="POST"
             style="display: none;">
             @csrf
         </form>
         
-            <a class="logo" href="{{ route('logout') }}" onclick="event.preventDefault();
-            document.getElementById('logout-form').submit();"> 
-                <span class="logo-lg"><b> <i class="fa fa-sign-out"></i>  Log out</b> <br><br></span>
-            </a>
+        <li class="{{ Route::is('requests.index') ? 'active' : '' }}"><a  href="{{ route('logout') }}" onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();" ><i class="fa fa-sign-out" aria-hidden="true"></i><span>Log out</span></a></li>
+           
         </div>
         {{-- <hr>
         <li><a href="#" class="text-center"><i class="fa fa-cubes"></i> <span>Log out</span></a></li> --}}
