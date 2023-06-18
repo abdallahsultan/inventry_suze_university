@@ -7,11 +7,12 @@
 <!-- Small boxes (Stat box) -->
 <div class="row">
     <!-- Log on to codeastro.com for more projects! -->
+    @if(auth()->user()->role == 'admin')
     <div class="col-md-3" style="width:24% !important">
         <!-- small box -->
         <div class="small-box bg-aqua">
             <div class="inner">
-                <h3>{{ \App\User::count() }}</h3>
+                <h3>{{ $user_count}}</h3>
 
                 <p>System Users</p>
             </div>
@@ -21,12 +22,13 @@
             <a href="/user" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
     </div>
+    @endif
     <!-- ./col -->
     <div class="col-md-3" style="width:24% !important">
         <!-- small box -->
         <div class="small-box bg-green">
             <div class="inner">
-                <h3>{{ \App\Category::count() }}<sup style="font-size: 20px"></sup></h3>
+                <h3>{{ $category_count }}<sup style="font-size: 20px"></sup></h3>
 
                 <p>Category</p>
             </div>
@@ -41,7 +43,7 @@
         <!-- small box -->
         <div class="small-box bg-yellow">
             <div class="inner">
-                <h3>{{ \App\Product::count() }}</h3>
+                <h3>{{ $product_count }}</h3>
                 <p>Product</p>
             </div>
             <div class="icon">
@@ -51,11 +53,12 @@
         </div>
     </div>
     <!-- ./col -->
+    @if(auth()->user()->role == 'admin')
     <div class="col-md-3" style="width:24% !important">
        
         <div class="small-box bg-red">
             <div class="inner">
-                <h3>{{ \App\Faculty::count() }}</h3>
+                <h3>{{ $faculty_count}}</h3>
 
                 <p>Faculty</p>
             </div>
@@ -66,6 +69,7 @@
             <a href="{{ route('faculties.index') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
     </div>
+    @endif
     <!-- ./col -->
 </div>
 <!-- Log on to codeastro.com for more projects! -->
@@ -94,10 +98,11 @@
         <div class="col-md-6">
         <canvas id="myChartcircel" style="width:100%;max-width:600px"></canvas>
         </div>
+        @if(auth()->user()->role == 'admin')
         <div class="col-md-6">
         <canvas id="myChartcircel3" style="width:100%;max-width:600px"></canvas>
         </div>
-        
+        @endif
     </div>
     <br>
     <br>

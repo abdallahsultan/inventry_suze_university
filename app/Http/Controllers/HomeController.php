@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Faculty;
+use App\Product;
 use App\Setting;
 use App\Category;
 use Carbon\Carbon;
@@ -100,6 +102,18 @@ class HomeController extends Controller
             }
          $chart2_yValues2[$category->name]= $sum_items_qty;
        }
+       if(auth()->user()->role == 'admin'){
+        $category_count = Category::count();
+        $user_count = User::count();
+        $faculty_count = Faculty::count();
+        $product_count = Product::count();
+       }else{
+    
+        $category_count  = count(array_unique($productQuntites->pluck('category_id')->toArray())); 
+        $product_count   = count(array_unique($productQuntites->pluck('product_id')->toArray())); 
+        $faculty_count = Faculty::count();
+        $user_count      = 0;
+       }
       
         $monthes=json_encode($monthes);
         $chart_yValues=json_encode($chart_yValues);
@@ -111,7 +125,7 @@ class HomeController extends Controller
         $notifcations=auth()->user()->faculty->notifications;
         $notify_count=$notifcations->count();
        
-        return view('home',compact('user','user_count','user_online','user_offline','chart2_yValues2','chart_yValues','monthes'));
+        return view('home',compact('user','user_count','user_online','user_offline','chart2_yValues2','chart_yValues','monthes','category_count','user_count','faculty_count','product_count'));
     }
     public function setting()
     {
